@@ -698,7 +698,7 @@
                                     <th class="py-3.5 px-3">Khu Vực</th>
                                     <th class="py-3.5 px-3 text-center">Hệ Số</th>
                                     <th class="py-3.5 px-3 text-right">Số Cũ</th>
-                                    <th class="py-3.5 px-4 text-center w-56">Số Mới (Ô Nhập Lớn)</th>
+                                    <th class="py-3.5 px-4 text-center min-w-[180px] sm:min-w-[220px]">Số Mới (Ô Nhập Lớn)</th>
                                     <th class="py-3.5 px-3 text-right">Tiêu Thụ</th>
                                     <th class="py-3.5 px-3 text-center">Trạng Thái</th>
                                     <th class="py-3.5 px-4 text-right">Thao Tác</th>
@@ -740,7 +740,7 @@
                                     <th class="py-3.5 px-3">Khu Vực</th>
                                     <th class="py-3.5 px-3 text-center">Hệ Số</th>
                                     <th class="py-3.5 px-3 text-right">Số Cũ (m³)</th>
-                                    <th class="py-3.5 px-4 text-center w-56">Số Mới (Ô Nhập Lớn)</th>
+                                    <th class="py-3.5 px-4 text-center min-w-[180px] sm:min-w-[220px]">Số Mới (Ô Nhập Lớn)</th>
                                     <th class="py-3.5 px-3 text-right">Tiêu Thụ</th>
                                     <th class="py-3.5 px-3 text-center">Trạng Thái</th>
                                     <th class="py-3.5 px-4 text-right">Thao Tác</th>
@@ -2208,7 +2208,6 @@
                     const prevVal = getPreviousReadingForMeter(m.id, selectedDate);
                     const draftKey = `${selectedDate}__${m.id}`;
                     
-                    // Nếu đã lưu hoặc không có draft, ô nhập liệu sẽ tự trả về ô trắng (trống) đúng yêu cầu
                     const currVal = unsavedMeterInputs[draftKey] !== undefined ? unsavedMeterInputs[draftKey] : '';
 
                     const numericCurr = parseFloat(currVal);
@@ -2240,11 +2239,11 @@
                             <td class="py-4 px-3 text-center font-semibold text-xs">×${m.multiplier || 1}</td>
                             <td class="py-4 px-3 text-right font-mono font-bold text-sm">${prevVal.toLocaleString('vi-VN')}</td>
                             <td class="py-4 px-4">
-                                <!-- TĂNG KÍCH THƯỚC Ô NHẬP LIỆU Ở PHIÊN BẢN ĐIỆN THOẠI & MÁY TÍNH -->
+                                <!-- Ô NHẬP LIỆU ĐƯỢC THIẾT KẾ RỘNG RÃI, CỠ CHỮ TO RÕ NÉT TRÊN ĐIỆN THOẠI -->
                                 <input type="number" step="any" inputmode="decimal" id="input-meter-${m.id}" value="${currVal}" ${!canRecord ? 'disabled' : ''}
-                                    placeholder="${savedRec ? 'Đã lưu: ' + savedRec.curr : 'Nhập số mới...'}"
+                                    placeholder="${savedRec ? 'Cũ: ' + savedRec.curr : 'Nhập số mới...'}"
                                     oninput="handleMeterInputChange('${m.id}', '${selectedDate}', ${prevVal}, ${m.multiplier || 1}, this.value)"
-                                    class="w-full px-4 py-3.5 rounded-2xl text-right font-mono font-extrabold text-lg sm:text-xl bg-white dark:bg-slate-900 border-2 ${anom.isAnomaly ? 'border-rose-500 text-rose-500' : 'border-blue-500/60 shadow-inner'} focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    class="w-full px-4 py-4 rounded-2xl text-right font-mono font-extrabold text-xl sm:text-2xl bg-white dark:bg-slate-900 border-2 ${anom.isAnomaly ? 'border-rose-500 text-rose-500' : 'border-blue-500/70 shadow-md'} focus:outline-none focus:ring-4 focus:ring-blue-500/30 transition-all">
                             </td>
                             <td class="py-4 px-3 text-right">
                                 <div id="calc-cons-${m.id}" class="font-mono font-extrabold text-base sm:text-lg ${anom.isAnomaly ? 'text-rose-500' : (isElectric ? 'text-amber-500' : 'text-cyan-500')}">
@@ -2298,7 +2297,6 @@
             if (!appState.readings[selectedDate]) appState.readings[selectedDate] = {};
             appState.readings[selectedDate][meterId] = { prev: prevVal, curr: rawVal, consumption, updatedAt: Date.now() };
 
-            // Sau khi bấm lưu, trả ô nhập liệu về ô trắng để tiện nhập cho lần sau
             delete unsavedMeterInputs[`${selectedDate}__${meterId}`];
             inputEl.value = '';
 
@@ -2324,7 +2322,7 @@
                     appState.readings[selectedDate][m.id] = { prev: prevVal, curr: currVal, consumption, updatedAt: Date.now() };
                     
                     delete unsavedMeterInputs[`${selectedDate}__${m.id}`];
-                    inputEl.value = ''; // Trả về ô trắng sau khi lưu
+                    inputEl.value = '';
                     count++;
                 }
             });
