@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Resort Power & Water OS — Hệ Thống Quản Lý Điện Nước</title>
-
+    <title>Resort Power & Water OS — Hệ Thống Quản Lý Điện Nước & Tủ Điện</title>
     <!-- PWA Fullscreen & iOS Standalone Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -193,7 +192,6 @@
     </style>
 </head>
 <body class="ios-bg min-h-screen text-slate-800 dark:text-slate-100 antialiased selection:bg-blue-500 selection:text-white pb-24 lg:pb-6">
-
     <!-- ==================== AUTHENTICATION & FIRST-TIME ADMIN SETUP OVERLAY ==================== -->
     <div id="authOverlay" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-2xl transition-all duration-300">
         <div class="glass-panel w-full max-w-md rounded-3xl p-6 sm:p-8 border border-white/20 shadow-2xl relative overflow-hidden">
@@ -208,7 +206,7 @@
                 </div>
                 <h1 class="text-2xl font-bold tracking-tight">Resort Power & Water OS</h1>
                 <p id="authSubtitle" class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Hệ thống quản lý Tủ điện, Công tơ & Tiêu thụ Năng lượng
+                    Hệ thống quản lý Tủ điện, Công tơ & Thiết bị Điện thông minh
                 </p>
             </div>
 
@@ -329,16 +327,16 @@
                         </button>
                         <button onclick="switchPage('meters')" id="nav-meters" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all">
                             <i data-lucide="gauge" class="w-5 h-5"></i>
-                            <span>Ghi Chỉ Số Công Tơ</span>
+                            <span>Quản Lý Công Tơ</span>
                             <span id="sidebarMeterCount" class="ml-auto text-[11px] px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-300">12</span>
+                        </button>
+                        <button onclick="switchPage('panels')" id="nav-panels" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all">
+                            <i data-lucide="server" class="w-5 h-5"></i>
+                            <span>Quản Lý Tủ Điện & Thiết Bị</span>
                         </button>
                         <button onclick="switchPage('sld')" id="nav-sld" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all">
                             <i data-lucide="git-fork" class="w-5 h-5"></i>
                             <span>Sơ Đồ Điện 1 Sợi (SLD)</span>
-                        </button>
-                        <button onclick="switchPage('equipment')" id="nav-equipment" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all">
-                            <i data-lucide="cpu" class="w-5 h-5"></i>
-                            <span>Thiết Bị & Cài Đặt Timer</span>
                         </button>
                         <button onclick="switchPage('accounts')" id="nav-accounts" class="nav-btn w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold transition-all">
                             <i data-lucide="shield-check" class="w-5 h-5"></i>
@@ -353,7 +351,7 @@
                         </div>
                         <button onclick="applyStandardizedResortTemplate()" class="w-full py-2 px-3 rounded-xl bg-white/80 dark:bg-slate-800 hover:bg-blue-600 hover:text-white text-xs font-semibold transition flex items-center gap-2 shadow-sm">
                             <i data-lucide="database-zap" class="w-3.5 h-3.5 text-amber-500"></i>
-                            <span class="truncate">Nạp Chuẩn Sơ Đồ & Công Tơ</span>
+                            <span class="truncate">Nạp Chuẩn Tủ Điện & Công Tơ</span>
                         </button>
                         <div class="grid grid-cols-2 gap-1.5">
                             <button onclick="exportSystemBackupJson()" class="py-2 px-2.5 rounded-xl bg-white/80 dark:bg-slate-800 hover:bg-emerald-600 hover:text-white text-[11px] font-semibold transition flex items-center justify-center gap-1 shadow-sm" title="Sao lưu hệ thống ra file JSON">
@@ -470,7 +468,7 @@
                     <div id="anomalyAlertCardsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3"></div>
                 </div>
 
-                <!-- KPI Summary Row (Master vs Sub-meters Loss Breakdown) -->
+                <!-- KPI Summary Row -->
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                     <div class="glass-card rounded-3xl p-4 sm:p-5">
                         <div class="flex items-center justify-between mb-2">
@@ -496,12 +494,12 @@
 
                     <div class="glass-card rounded-3xl p-4 sm:p-5">
                         <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Thiết bị & Tủ điện</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Tổng Tủ Điện & Thiết Bị</span>
                             <div class="w-9 h-9 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center">
-                                <i data-lucide="cpu" class="w-5 h-5"></i>
+                                <i data-lucide="server" class="w-5 h-5"></i>
                             </div>
                         </div>
-                        <div class="text-xl sm:text-2xl font-extrabold tracking-tight text-emerald-500" id="kpiEquipmentCount">0</div>
+                        <div class="text-xl sm:text-2xl font-extrabold tracking-tight text-emerald-500" id="kpiPanelDeviceCount">0</div>
                         <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1">Đang vận hành ổn định</p>
                     </div>
 
@@ -535,8 +533,8 @@
                             <span>Xuất Báo Cáo Excel (.xlsx)</span>
                         </button>
                         <button onclick="switchPage('meters')" class="px-4 py-2 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow transition">
-                            <i data-lucide="edit-3" class="w-3.5 h-3.5"></i>
-                            <span>Nhập chỉ số</span>
+                            <i data-lucide="gauge" class="w-3.5 h-3.5"></i>
+                            <span>Nhập chỉ số công tơ</span>
                         </button>
                     </div>
                 </div>
@@ -559,9 +557,6 @@
                                     <option value="master_vs_sub" selected>Đầu nguồn (Master) vs Tổng Nhánh & Tổn hao</option>
                                     <option value="master_only">Chỉ Công tơ Đầu nguồn (MSB-01 Master)</option>
                                     <option value="sub_total">Tổng các Công tơ Nhánh (Sub-meters)</option>
-                                    <option value="by_zone_stack">So sánh theo Khu vực Nhánh</option>
-                                    <optgroup label="Lọc theo Khu Vực" id="elecZoneOptGroup"></optgroup>
-                                    <optgroup label="Lọc theo Từng Công Tơ" id="elecMeterOptGroup"></optgroup>
                                 </select>
 
                                 <select id="elecChartType" onchange="updateDashboardCharts()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/80 dark:bg-slate-800 border border-slate-300/60 dark:border-slate-700 focus:outline-none">
@@ -595,16 +590,12 @@
                                     <option value="master_vs_sub" selected>Đầu nguồn Thủy Cục vs Tổng Nhánh Cấp</option>
                                     <option value="all_water">Chỉ Đồng hồ Tổng Thủy Cục (Master)</option>
                                     <option value="sub_water">Tổng các Đồng hồ Nhánh (Sub-meters)</option>
-                                    <option value="compare_water">So sánh các đồng hồ nước</option>
-                                    <optgroup label="Theo Khu Vực" id="waterZoneOptGroup"></optgroup>
-                                    <optgroup label="Theo Từng Công Tơ Nước" id="waterMeterOptGroup"></optgroup>
                                 </select>
 
                                 <select id="waterChartType" onchange="updateDashboardCharts()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/80 dark:bg-slate-800 border border-slate-300/60 dark:border-slate-700 focus:outline-none">
                                     <option value="area">Miền (Area)</option>
                                     <option value="bar">Cột (Bar)</option>
                                     <option value="line">Đường (Line)</option>
-                                    <option value="doughnut">Tỷ trọng (Doughnut)</option>
                                 </select>
                             </div>
                         </div>
@@ -614,232 +605,6 @@
                         </div>
 
                         <div id="waterSummaryRow" class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2"></div>
-                    </div>
-                </div>
-
-                <!-- OCCUPANCY (%OCC) & CPOR COST ALLOCATION -->
-                <div class="glass-panel rounded-3xl p-4 sm:p-6 space-y-5 border border-indigo-500/25">
-                    <div class="flex flex-wrap items-start justify-between gap-4 border-b border-slate-200/60 dark:border-slate-700/50 pb-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-500 text-white flex items-center justify-center shadow-lg shrink-0">
-                                <i data-lucide="bed-double" class="w-6 h-6"></i>
-                            </div>
-                            <div>
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <h3 class="font-bold text-base sm:text-lg">Công Suất Phòng (%OCC) & Phân Bổ Chi Phí Theo Phòng (CPOR)</h3>
-                                    <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-500/15 text-indigo-600 dark:text-indigo-300">Master Meter</span>
-                                </div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Tự động phân bổ chi phí năng lượng dựa trên sản lượng đầu nguồn thực tế và số phòng có khách</p>
-                            </div>
-                        </div>
-
-                        <!-- Room Inventory & Tariff Config -->
-                        <div class="flex flex-wrap items-center gap-2">
-                            <div class="flex items-center gap-1.5 bg-white/80 dark:bg-slate-800 px-3 py-1.5 rounded-2xl border border-slate-300/60 dark:border-slate-700">
-                                <span class="text-[11px] font-semibold text-slate-500">Tổng phòng:</span>
-                                <input id="cfgTotalRoomsInput" type="number" min="1" step="1" inputmode="numeric" onchange="saveResortRoomAndTariffConfig()"
-                                    class="w-16 text-right font-mono font-extrabold text-sm text-indigo-600 dark:text-indigo-400 bg-transparent focus:outline-none">
-                            </div>
-
-                            <div class="flex items-center gap-1.5 bg-white/80 dark:bg-slate-800 px-3 py-1.5 rounded-2xl border border-slate-300/60 dark:border-slate-700">
-                                <span class="text-[11px] font-semibold text-slate-500">Giá điện:</span>
-                                <input id="cfgElecTariffInput" type="number" min="0" step="100" inputmode="numeric" onchange="saveResortRoomAndTariffConfig()"
-                                    class="w-20 text-right font-mono font-bold text-xs text-amber-500 bg-transparent focus:outline-none">
-                                <span class="text-[10px] text-slate-400">đ/kWh</span>
-                            </div>
-
-                            <div class="flex items-center gap-1.5 bg-white/80 dark:bg-slate-800 px-3 py-1.5 rounded-2xl border border-slate-300/60 dark:border-slate-700">
-                                <span class="text-[11px] font-semibold text-slate-500">Giá nước:</span>
-                                <input id="cfgWaterTariffInput" type="number" min="0" step="500" inputmode="numeric" onchange="saveResortRoomAndTariffConfig()"
-                                    class="w-20 text-right font-mono font-bold text-xs text-cyan-500 bg-transparent focus:outline-none">
-                                <span class="text-[10px] text-slate-400">đ/m³</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KPI Cards -->
-                    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3">
-                        <div class="glass-card rounded-2xl p-3.5 border-l-4 border-indigo-500">
-                            <div class="text-[11px] font-semibold text-slate-500">Công suất phòng hôm nay</div>
-                            <div class="text-lg sm:text-xl font-extrabold text-indigo-500 mt-1" id="occKpiTodayPct">0% OCC</div>
-                            <div class="text-[11px] text-slate-500 mt-0.5" id="occKpiTodayRooms">0 / 120 phòng</div>
-                        </div>
-
-                        <div class="glass-card rounded-2xl p-3.5 border-l-4 border-amber-500">
-                            <div class="text-[11px] font-semibold text-slate-500">Định mức Điện / Phòng bán</div>
-                            <div class="text-lg sm:text-xl font-extrabold text-amber-500 mt-1" id="occKpiElecPerRoom">0 kWh/phòng</div>
-                            <div class="text-[11px] text-slate-500 mt-0.5" id="occKpiElecCostPerRoom">0 đ / phòng</div>
-                        </div>
-
-                        <div class="glass-card rounded-2xl p-3.5 border-l-4 border-cyan-500">
-                            <div class="text-[11px] font-semibold text-slate-500">Định mức Nước / Phòng bán</div>
-                            <div class="text-lg sm:text-xl font-extrabold text-cyan-500 mt-1" id="occKpiWaterPerRoom">0 m³/phòng</div>
-                            <div class="text-[11px] text-slate-500 mt-0.5" id="occKpiWaterCostPerRoom">0 đ / phòng</div>
-                        </div>
-
-                        <div class="glass-card rounded-2xl p-3.5 border-l-4 border-emerald-500">
-                            <div class="text-[11px] font-semibold text-slate-500">Tổng Chi Phí / Phòng bán</div>
-                            <div class="text-lg sm:text-xl font-extrabold text-emerald-500 mt-1" id="occKpiTotalCostPerRoom">0 đ/phòng</div>
-                            <div class="text-[11px] text-slate-500 mt-0.5" id="occKpiTotalPerAvailableRoom">0 đ / PAR</div>
-                        </div>
-
-                        <div class="glass-card rounded-2xl p-3.5 border-l-4 border-purple-500 col-span-2 lg:col-span-1">
-                            <div class="text-[11px] font-semibold text-slate-500">Tổng Chi Phí Ngày</div>
-                            <div class="text-lg sm:text-xl font-extrabold text-purple-500 mt-1" id="occKpiDailyTotalCost">0 VNĐ</div>
-                            <div class="text-[11px] text-slate-500 mt-0.5" id="occKpiDailySplit">Điện & Nước</div>
-                        </div>
-                    </div>
-
-                    <!-- OCC & Table -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
-                        <div class="p-4 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 space-y-3">
-                            <div class="flex items-center justify-between">
-                                <span class="text-xs font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-300">Cập nhật %OCC theo ngày</span>
-                                <span class="text-[11px] font-mono text-slate-500" id="occSelectedDateLabel">Hôm nay</span>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-semibold text-slate-500 mb-1">Chọn ngày</label>
-                                <input type="date" id="occEditDateInput" onchange="handleOccDateSelectionChange()"
-                                    class="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs font-bold">
-                            </div>
-                            <div class="grid grid-cols-2 gap-2.5">
-                                <div>
-                                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">Công suất (%OCC)</label>
-                                    <div class="relative">
-                                        <input type="number" id="occEditPctInput" min="0" max="100" step="0.1" inputmode="decimal"
-                                            oninput="syncOccRoomsFromPct(this.value)"
-                                            class="w-full pl-3 pr-7 py-2 rounded-xl bg-white dark:bg-slate-900 border-2 border-indigo-500/50 font-mono font-extrabold text-sm text-right focus:outline-none">
-                                        <span class="absolute right-2.5 top-2 text-xs font-bold text-slate-400">%</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-semibold text-slate-500 mb-1">Phòng bán thực tế</label>
-                                    <input type="number" id="occEditRoomsInput" min="0" step="1" inputmode="numeric"
-                                        oninput="syncOccPctFromRooms(this.value)"
-                                        class="w-full px-3 py-2 rounded-xl bg-white dark:bg-slate-900 border-2 border-indigo-500/50 font-mono font-extrabold text-sm text-right focus:outline-none">
-                                </div>
-                            </div>
-                            <button onclick="saveDailyOccupancyRecord()" class="w-full py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md transition flex items-center justify-center gap-1.5">
-                                <i data-lucide="save" class="w-4 h-4"></i>
-                                <span>Lưu %OCC & Tính Phân Bổ</span>
-                            </button>
-                        </div>
-
-                        <div class="lg:col-span-2 overflow-x-auto rounded-2xl border border-slate-200/70 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/40">
-                            <table class="w-full text-left border-collapse text-xs">
-                                <thead>
-                                    <tr class="border-b border-slate-200/70 dark:border-slate-700/60 bg-slate-100/70 dark:bg-slate-800/60 text-[10px] font-bold uppercase text-slate-500">
-                                        <th class="py-2.5 px-3">Ngày</th>
-                                        <th class="py-2.5 px-2.5 text-center">%OCC</th>
-                                        <th class="py-2.5 px-2.5 text-center">Phòng bán</th>
-                                        <th class="py-2.5 px-2.5 text-right">Điện/Phòng</th>
-                                        <th class="py-2.5 px-2.5 text-right">Nước/Phòng</th>
-                                        <th class="py-2.5 px-3 text-right">CPOR / Phòng Bán</th>
-                                        <th class="py-2.5 px-3 text-right">Tổng Chi Phí</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="occAllocationTableBody" class="divide-y divide-slate-200/50 dark:divide-slate-700/40"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FORECAST & HISTORICAL COMPARISON -->
-                <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
-                    <!-- FORECAST -->
-                    <div class="glass-panel rounded-3xl p-4 sm:p-6 flex flex-col justify-between space-y-4 border border-amber-500/20">
-                        <div class="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200/60 dark:border-slate-700/50 pb-3">
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 rounded-full bg-purple-500 animate-pulse"></span>
-                                    <h3 class="font-bold text-base">Dự Báo Phụ Tải Tương Lai (AI Regression)</h3>
-                                </div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Dự báo dựa trên sản lượng Master đầu nguồn thực tế</p>
-                            </div>
-
-                            <div class="flex flex-wrap items-center gap-2">
-                                <select id="forecastHorizonSelect" onchange="renderLoadForecastSection()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/80 dark:bg-slate-800 border border-slate-300/60 dark:border-slate-700">
-                                    <option value="7d" selected>7 ngày tới</option>
-                                    <option value="30d">30 ngày tới</option>
-                                    <option value="12m">12 tháng tới</option>
-                                </select>
-
-                                <div class="flex items-center gap-1.5 bg-purple-500/15 text-purple-600 dark:text-purple-300 px-3 py-1 rounded-xl border border-purple-500/30 text-xs font-bold">
-                                    <span>%OCC:</span>
-                                    <input type="number" id="forecastExpectedOccInput" min="10" max="100" step="5" value="78"
-                                        oninput="renderLoadForecastSection()"
-                                        class="w-12 text-center bg-transparent font-mono font-extrabold focus:outline-none">
-                                    <span>%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-2.5">
-                            <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25">
-                                <div class="text-[10px] font-bold uppercase text-amber-600 dark:text-amber-300">Dự báo Điện</div>
-                                <div class="text-sm sm:text-base font-extrabold text-amber-500 mt-0.5" id="fcTotalElecVal">0 kWh</div>
-                                <div class="text-[10px] text-slate-500" id="fcBaseLoadElecNote">Nền: 0 kWh</div>
-                            </div>
-                            <div class="p-3 rounded-2xl bg-cyan-500/10 border border-cyan-500/25">
-                                <div class="text-[10px] font-bold uppercase text-cyan-600 dark:text-cyan-300">Dự báo Nước</div>
-                                <div class="text-sm sm:text-base font-extrabold text-cyan-500 mt-0.5" id="fcTotalWaterVal">0 m³</div>
-                                <div class="text-[10px] text-slate-500" id="fcBaseLoadWaterNote">Nền: 0 m³</div>
-                            </div>
-                            <div class="p-3 rounded-2xl bg-purple-500/10 border border-purple-500/25">
-                                <div class="text-[10px] font-bold uppercase text-purple-600 dark:text-purple-300">Chi Phí Dự Kiến</div>
-                                <div class="text-sm sm:text-base font-extrabold text-purple-500 mt-0.5" id="fcTotalCostVal">0 tr.đ</div>
-                                <div class="text-[10px] text-slate-500" id="fcPerRoomCostNote">0 đ/phòng</div>
-                            </div>
-                        </div>
-
-                        <div class="relative h-64 sm:h-72 w-full">
-                            <canvas id="forecastChartCanvas"></canvas>
-                        </div>
-                    </div>
-
-                    <!-- HISTORICAL COMPARISON (2026 LIVE vs 2025 YoY) -->
-                    <div class="glass-panel rounded-3xl p-4 sm:p-6 flex flex-col justify-between space-y-4 border border-emerald-500/20">
-                        <div class="flex flex-wrap items-start justify-between gap-3 border-b border-slate-200/60 dark:border-slate-700/50 pb-3">
-                            <div>
-                                <div class="flex items-center gap-2">
-                                    <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-                                    <h3 class="font-bold text-base">So Sánh Tháng / Năm (2026 Live vs MoM / YoY)</h3>
-                                </div>
-                                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Tự động tổng hợp dữ liệu thực tế năm 2026 so sánh cùng kỳ 2025</p>
-                            </div>
-
-                            <div class="flex flex-wrap items-center gap-2">
-                                <select id="comparisonYearSelect" onchange="renderHistoricalComparisonSection()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white/80 dark:bg-slate-800 border border-slate-300/60 dark:border-slate-700">
-                                    <option value="2026" selected>Năm 2026 (Thực tế) vs 2025</option>
-                                    <option value="2025">Năm 2025 vs 2024</option>
-                                    <option value="2024">Năm 2024 vs 2023</option>
-                                </select>
-
-                                <button onclick="exportFullComparisonExcelWorkbook()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow transition">
-                                    <i data-lucide="file-spreadsheet" class="w-3.5 h-3.5"></i>
-                                    <span>Xuất Excel</span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-3 gap-2.5" id="momYoySummaryCards"></div>
-
-                        <div class="overflow-x-auto max-h-72 rounded-2xl border border-slate-200/70 dark:border-slate-700/60 bg-white/50 dark:bg-slate-900/40">
-                            <table class="w-full text-left border-collapse text-xs">
-                                <thead class="sticky top-0 bg-slate-100 dark:bg-slate-800 text-[10px] font-bold uppercase text-slate-500">
-                                    <tr>
-                                        <th class="py-2.5 px-3">Kỳ Tháng</th>
-                                        <th class="py-2.5 px-2 text-center">%OCC</th>
-                                        <th class="py-2.5 px-2.5 text-right">Điện (kWh)</th>
-                                        <th class="py-2.5 px-2 text-center">YoY</th>
-                                        <th class="py-2.5 px-2.5 text-right">Nước (m³)</th>
-                                        <th class="py-2.5 px-2 text-center">YoY</th>
-                                        <th class="py-2.5 px-3 text-right">CPOR / Phòng</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="historicalComparisonTableBody" class="divide-y divide-slate-200/50 dark:divide-slate-700/40"></tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -870,11 +635,6 @@
                             <span>Thêm công tơ</span>
                         </button>
 
-                        <button id="btnWipeReportToolbar" onclick="openWipeReportDataModal()" class="px-3.5 py-2.5 rounded-2xl bg-rose-500/15 text-rose-600 hover:bg-rose-600 hover:text-white border border-rose-500/30 text-xs font-bold flex items-center gap-1.5 transition" title="Làm trắng dữ liệu báo cáo (Yêu cầu mật khẩu Admin)">
-                            <i data-lucide="eraser" class="w-4 h-4"></i>
-                            <span class="hidden sm:inline">Làm Trắng Báo Cáo</span>
-                        </button>
-
                         <button id="btnSaveAllMeters" onclick="saveAllMeterReadings()" class="px-5 py-2.5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-emerald-500/25 transition flex items-center gap-2">
                             <i data-lucide="check-check" class="w-4 h-4"></i>
                             <span>Lưu Tất Cả</span>
@@ -882,31 +642,24 @@
                     </div>
                 </div>
 
-                <!-- EXCEL / CSV IMPORT & EXPORT TOOLBAR -->
+                <!-- EXCEL & IMPORT/EXPORT TOOLBAR -->
                 <div class="glass-panel rounded-3xl p-3.5 sm:p-4 flex flex-wrap items-center justify-between gap-3 border border-emerald-500/20">
                     <div class="flex items-center gap-2.5">
                         <div class="w-9 h-9 rounded-2xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center shrink-0">
                             <i data-lucide="file-spreadsheet" class="w-5 h-5"></i>
                         </div>
                         <div>
-                            <h4 class="text-xs sm:text-sm font-bold">Công Cụ Excel / CSV (.xlsx)</h4>
-                            <p class="text-[11px] text-slate-500 dark:text-slate-400">Xuất biểu mẫu hoặc nhập dữ liệu chốt số hàng loạt</p>
+                            <h4 class="text-xs sm:text-sm font-bold">Quản Lý & Chốt Số Công Tơ Nhanh</h4>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400">Ô nhập liệu lớn tối ưu trên điện thoại. Bấm Lưu sẽ tự động làm trống ô để nhập lần sau.</p>
                         </div>
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2">
                         <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleImportExcelFile(event)">
-
                         <button onclick="downloadExcelTemplate()" class="px-3 py-2 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-xs font-semibold flex items-center gap-1.5 transition">
                             <i data-lucide="file-down" class="w-3.5 h-3.5 text-blue-500"></i>
                             <span>Tải File Mẫu</span>
                         </button>
-
-                        <button onclick="document.getElementById('excelFileInput').click()" class="px-3.5 py-2 rounded-xl bg-blue-500/15 text-blue-600 border border-blue-500/30 text-xs font-bold flex items-center gap-1.5 transition">
-                            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
-                            <span>Nhập Excel</span>
-                        </button>
-
                         <button onclick="exportResortExcelWorkbook()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow transition">
                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                             <span>Xuất Excel Đa Sheet</span>
@@ -932,7 +685,7 @@
                                 <span id="tableTotalElec" class="ml-1 text-base font-extrabold text-amber-500">0 kWh</span>
                             </div>
                             <div id="tableLossElecSummary" class="text-[11px] font-mono text-slate-500">
-                                Tổng nhánh: 0 kWh • Tổn hao: 0 kWh (0%)
+                                Tổng nhánh: 0 kWh • Tổn hao: 0 kWh
                             </div>
                         </div>
                     </div>
@@ -945,8 +698,8 @@
                                     <th class="py-3.5 px-3">Khu Vực</th>
                                     <th class="py-3.5 px-3 text-center">Hệ Số</th>
                                     <th class="py-3.5 px-3 text-right">Số Cũ</th>
-                                    <th class="py-3.5 px-4 text-center w-48">Số Mới (Hằng Ngày)</th>
-                                    <th class="py-3.5 px-3 text-right">Tiêu Thụ / TB 7d</th>
+                                    <th class="py-3.5 px-4 text-center w-56">Số Mới (Ô Nhập Lớn)</th>
+                                    <th class="py-3.5 px-3 text-right">Tiêu Thụ</th>
                                     <th class="py-3.5 px-3 text-center">Trạng Thái</th>
                                     <th class="py-3.5 px-4 text-right">Thao Tác</th>
                                 </tr>
@@ -974,7 +727,7 @@
                                 <span id="tableTotalWater" class="ml-1 text-base font-extrabold text-cyan-500">0 m³</span>
                             </div>
                             <div id="tableLossWaterSummary" class="text-[11px] font-mono text-slate-500">
-                                Tổng nhánh: 0 m³ • Chênh lệch: 0 m³ (0%)
+                                Tổng nhánh: 0 m³
                             </div>
                         </div>
                     </div>
@@ -987,8 +740,8 @@
                                     <th class="py-3.5 px-3">Khu Vực</th>
                                     <th class="py-3.5 px-3 text-center">Hệ Số</th>
                                     <th class="py-3.5 px-3 text-right">Số Cũ (m³)</th>
-                                    <th class="py-3.5 px-4 text-center w-48">Số Mới (Hằng Ngày)</th>
-                                    <th class="py-3.5 px-3 text-right">Tiêu Thụ / TB 7d</th>
+                                    <th class="py-3.5 px-4 text-center w-56">Số Mới (Ô Nhập Lớn)</th>
+                                    <th class="py-3.5 px-3 text-right">Tiêu Thụ</th>
                                     <th class="py-3.5 px-3 text-center">Trạng Thái</th>
                                     <th class="py-3.5 px-4 text-right">Thao Tác</th>
                                 </tr>
@@ -999,7 +752,26 @@
                 </div>
             </section>
 
-            <!-- ==================== PAGE 3: SINGLE-LINE DIAGRAM (SLD) ==================== -->
+            <!-- ==================== PAGE 3: ELECTRICAL PANELS & DEVICES MANAGEMENT ==================== -->
+            <section id="page-panels" class="page-view space-y-5">
+                <div class="glass-panel rounded-3xl p-4 flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <h3 class="font-bold text-base sm:text-lg">Quản Lý Tủ Điện & Thiết Bị Trong Tủ</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400">Thêm bớt thiết bị bằng danh mục thiết bị điện sẵn có (MCCB, MCB, CB, ELB, RCBO, Biến Tần, Contactor, Timer, Công Tơ...)</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-2">
+                        <button onclick="openAddPanelModal()" class="px-4 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i> Thêm Tủ Điện Mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Panels Grid -->
+                <div id="electricalPanelsGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-5"></div>
+            </section>
+
+            <!-- ==================== PAGE 4: SINGLE-LINE DIAGRAM (SLD) ==================== -->
             <section id="page-sld" class="page-view space-y-4">
                 <div class="glass-panel rounded-3xl p-3 sm:p-4 flex flex-wrap items-center justify-between gap-3">
                     <div class="flex items-center gap-2 flex-wrap">
@@ -1034,7 +806,7 @@
                     </div>
                 </div>
 
-                <!-- SLD Canvas (Cleaned up: No overlay legend overlapping viewport) -->
+                <!-- SLD Canvas -->
                 <div class="glass-panel rounded-3xl overflow-hidden relative h-[560px] sm:h-[640px] select-none">
                     <div class="absolute bottom-4 right-4 z-20 flex flex-col items-center gap-1 glass-card p-2 rounded-2xl">
                         <button onclick="panSldBy(0, 60)" class="p-1.5 rounded-lg hover:bg-blue-500/20"><i data-lucide="chevron-up" class="w-4 h-4"></i></button>
@@ -1083,66 +855,6 @@
                                 <g id="sldNodesLayer"></g>
                             </g>
                         </svg>
-                    </div>
-                </div>
-            </section>
-
-            <!-- ==================== PAGE 4: EQUIPMENT & TIMERS ==================== -->
-            <section id="page-equipment" class="page-view space-y-5">
-                <div class="glass-panel rounded-3xl p-4 flex flex-wrap items-center justify-between gap-3">
-                    <div class="inline-flex p-1.5 rounded-2xl bg-slate-200/80 dark:bg-slate-800/90">
-                        <button onclick="switchEquipSubTab('list')" id="eqtab-list" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow">Thiết Bị</button>
-                        <button onclick="switchEquipSubTab('categories')" id="eqtab-categories" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300">Danh Mục</button>
-                        <button onclick="switchEquipSubTab('timers')" id="eqtab-timers" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300">Timer & Lịch Sử</button>
-                    </div>
-
-                    <div class="flex items-center gap-2">
-                        <button onclick="openEquipmentModal()" class="px-4 py-2.5 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center gap-1.5 shadow">
-                            <i data-lucide="plus" class="w-4 h-4"></i> Thêm Thiết Bị
-                        </button>
-                        <button onclick="openCategoryModal()" class="px-3.5 py-2.5 rounded-2xl bg-purple-500/15 text-purple-600 text-xs font-semibold flex items-center gap-1.5">
-                            <i data-lucide="folder-plus" class="w-4 h-4"></i> Tạo Danh Mục
-                        </button>
-                        <button onclick="openTimerModal()" class="px-3.5 py-2.5 rounded-2xl bg-amber-500/15 text-amber-600 text-xs font-semibold flex items-center gap-1.5">
-                            <i data-lucide="alarm-clock-plus" class="w-4 h-4"></i> Cài Timer
-                        </button>
-                    </div>
-                </div>
-
-                <div id="equipListContainer" class="space-y-4">
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                        <div class="flex items-center gap-2 flex-wrap" id="categoryFilterPills"></div>
-                        <input type="text" id="equipSearchInput" oninput="renderEquipmentList()" placeholder="Tìm kiếm thiết bị..."
-                            class="px-4 py-2 rounded-2xl bg-white/80 dark:bg-slate-800 border border-slate-300/60 dark:border-slate-700 text-xs sm:text-sm w-full sm:w-72 focus:outline-none">
-                    </div>
-                    <div id="equipmentCardsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
-                </div>
-
-                <div id="equipCategoriesContainer" class="hidden space-y-4">
-                    <div class="glass-panel rounded-3xl p-5">
-                        <h3 class="font-bold text-base mb-1">Quản Lý Danh Mục Thiết Bị</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Nhóm thiết bị điện, nước và tủ phân phối.</p>
-                        <div id="customCategoriesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
-                    </div>
-                </div>
-
-                <div id="equipTimersContainer" class="hidden grid grid-cols-1 lg:grid-cols-3 gap-5">
-                    <div class="lg:col-span-2 space-y-3">
-                        <div class="glass-panel rounded-3xl p-5">
-                            <h3 class="font-bold text-base mb-1">Danh Sách Hẹn Giờ (Timer) Tự Động</h3>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Quản lý thời gian Bật/Tắt thiết bị cảnh quan, bơm hồ bơi và AHU.</p>
-                            <div id="timersListGrid" class="space-y-3"></div>
-                        </div>
-                    </div>
-                    <div class="glass-panel rounded-3xl p-5 flex flex-col justify-between">
-                        <div>
-                            <div class="flex items-center gap-2 mb-2">
-                                <i data-lucide="history" class="w-5 h-5 text-purple-500"></i>
-                                <h3 class="font-bold text-base">Lịch Sử Cấu Hình Timer</h3>
-                            </div>
-                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-4">Xem lại các mốc thay đổi thông số Timer.</p>
-                            <div id="timerHistoryLog" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1"></div>
-                        </div>
                     </div>
                 </div>
             </section>
@@ -1208,7 +920,7 @@
                             </div>
 
                             <div id="nonAdminNotice" class="hidden p-4 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs">
-                                Bạn đang đăng nhập với quyền <strong>User (Kỹ thuật viên)</strong>. Một số thao tác đã được Admin hạn chế theo bảng phân quyền bên dưới.
+                                Bạn đang đăng nhập với quyền <strong>User (Kỹ thuật viên)</strong>. Một số thao tác đã được Admin hạn chế.
                             </div>
 
                             <div class="overflow-x-auto">
@@ -1261,13 +973,13 @@
             <i data-lucide="gauge" class="w-5 h-5"></i>
             <span class="text-[10px] font-semibold mt-0.5">Công tơ</span>
         </button>
+        <button onclick="switchPage('panels')" id="mnav-panels" class="mnav-btn flex flex-col items-center py-1 px-3 rounded-2xl text-slate-500">
+            <i data-lucide="server" class="w-5 h-5"></i>
+            <span class="text-[10px] font-semibold mt-0.5">Tủ điện</span>
+        </button>
         <button onclick="switchPage('sld')" id="mnav-sld" class="mnav-btn flex flex-col items-center py-1 px-3 rounded-2xl text-slate-500">
             <i data-lucide="git-fork" class="w-5 h-5"></i>
             <span class="text-[10px] font-semibold mt-0.5">Sơ đồ điện</span>
-        </button>
-        <button onclick="switchPage('equipment')" id="mnav-equipment" class="mnav-btn flex flex-col items-center py-1 px-3 rounded-2xl text-slate-500">
-            <i data-lucide="cpu" class="w-5 h-5"></i>
-            <span class="text-[10px] font-semibold mt-0.5">Thiết bị</span>
         </button>
         <button onclick="switchPage('accounts')" id="mnav-accounts" class="mnav-btn flex flex-col items-center py-1 px-3 rounded-2xl text-slate-500">
             <i data-lucide="shield-check" class="w-5 h-5"></i>
@@ -1295,7 +1007,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { 
-            getFirestore, doc, setDoc, getDoc, onSnapshot, 
+            getFirestore, doc, setDoc, onSnapshot, 
             enableIndexedDbPersistence 
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
@@ -1314,9 +1026,9 @@
         let simulatedOffline = false;
         let unsubscribeRemote = null;
 
-        const STORAGE_KEY_STATE = "RESORT_UTILITY_OS_STATE_V5";
-        const STORAGE_KEY_PENDING = "RESORT_UTILITY_PENDING_SYNC_V5";
-        const STORAGE_KEY_SESSION = "RESORT_UTILITY_SESSION_V5";
+        const STORAGE_KEY_STATE = "RESORT_UTILITY_OS_STATE_V6";
+        const STORAGE_KEY_PENDING = "RESORT_UTILITY_PENDING_SYNC_V6";
+        const STORAGE_KEY_SESSION = "RESORT_UTILITY_SESSION_V6";
 
         function getPastDateStr(daysAgo) {
             const d = new Date();
@@ -1324,13 +1036,17 @@
             return d.toISOString().split('T')[0];
         }
 
+        const STANDARD_DEVICE_CATEGORIES = [
+            "MCCB", "MCB", "CB", "ELB", "RCBO", "Biến Tần", "Contactor", "Timer", "Công Tơ", "ACB", "Relay", "PLC", "Đèn Báo", "Nút Nhấn"
+        ];
+
         function createDefaultResortState() {
             const d6 = getPastDateStr(6), d5 = getPastDateStr(5), d4 = getPastDateStr(4),
                   d3 = getPastDateStr(3), d2 = getPastDateStr(2), d1 = getPastDateStr(1),
                   d0 = getPastDateStr(0);
 
             return {
-                schemaVersion: 5,
+                schemaVersion: 6,
                 lastUpdated: Date.now(),
                 anomalyThresholdPercent: 20,
                 totalResortRooms: 120,
@@ -1338,35 +1054,12 @@
                 waterTariffVnd: 18500,
                 userPermissions: {
                     allowRecordMeters: true,
-                    allowManageMeters: false,
-                    allowEditSld: false,
-                    allowManageEquipment: false,
+                    allowManageMeters: true,
+                    allowEditSld: true,
+                    allowManageEquipment: true,
                     allowEditConfigAndOcc: true,
-                    allowImportExcel: false
+                    allowImportExcel: true
                 },
-                occupancyByDate: {
-                    [d6]: { occPercent: 65.0, roomsSold: 78 },
-                    [d5]: { occPercent: 70.0, roomsSold: 84 },
-                    [d4]: { occPercent: 67.5, roomsSold: 81 },
-                    [d3]: { occPercent: 75.0, roomsSold: 90 },
-                    [d2]: { occPercent: 72.5, roomsSold: 87 },
-                    [d1]: { occPercent: 74.2, roomsSold: 89 },
-                    [d0]: { occPercent: 85.0, roomsSold: 102 }
-                },
-                historicalMonthlyBenchmarks: [
-                    { month: 1, label: "Tháng 01", occ2026: 71, elec2026: 144200, water2026: 9280, occ2025: 68, elec2025: 138500, elec2024: 131200, water2025: 8920, water2024: 8450 },
-                    { month: 2, label: "Tháng 02", occ2026: 77, elec2026: 151800, water2026: 9790, occ2025: 74, elec2025: 146200, elec2024: 140800, water2025: 9410, water2024: 9100 },
-                    { month: 3, label: "Tháng 03", occ2026: 74, elec2026: 147900, water2026: 9510, occ2025: 71, elec2025: 142800, elec2024: 139500, water2025: 9180, water2024: 8990 },
-                    { month: 4, label: "Tháng 04", occ2026: 82, elec2026: 164100, water2026: 10620, occ2025: 79, elec2025: 158400, elec2024: 149000, water2025: 10250, water2024: 9680 },
-                    { month: 5, label: "Tháng 05", occ2026: 86, elec2026: 177500, water2026: 11490, occ2025: 84, elec2025: 171900, elec2024: 162300, water2025: 11120, water2024: 10540 },
-                    { month: 6, label: "Tháng 06", occ2026: 90, elec2026: 188200, water2026: 12250, occ2025: 88, elec2025: 182400, elec2024: 175600, water2025: 11890, water2024: 11400 },
-                    { month: 7, label: "Tháng 07", occ2026: 93, elec2026: 195400, water2026: 12720, occ2025: 91, elec2025: 189500, elec2024: 181200, water2025: 12340, water2024: 11820 },
-                    { month: 8, label: "Tháng 08", occ2026: 88, elec2026: 182100, water2026: 11880, occ2025: 86, elec2025: 176800, elec2024: 170400, water2025: 11520, water2024: 11150 },
-                    { month: 9, label: "Tháng 09", occ2026: 75, elec2026: 153800, water2026: 9910, occ2025: 72, elec2025: 148900, elec2024: 144100, water2025: 9580, water2024: 9320 },
-                    { month: 10, label: "Tháng 10", occ2026: 72, elec2026: 146300, water2026: 9440, occ2025: 69, elec2025: 141200, elec2024: 137800, water2025: 9120, water2024: 8910 },
-                    { month: 11, label: "Tháng 11", occ2026: 78, elec2026: 154200, water2026: 9890, occ2025: 73, elec2025: 147600, elec2024: 141900, water2025: 9490, water2024: 9180 },
-                    { month: 12, label: "Tháng 12", occ2026: 85, elec2026: 172800, water2026: 11190, occ2025: 82, elec2025: 166400, elec2024: 158700, water2025: 10780, water2024: 10290 }
-                ],
                 zones: [
                     "Phòng Hạ Thế (LV Switchboard Room)",
                     "Khu Chiller (Central Chiller Plant)",
@@ -1376,13 +1069,32 @@
                     "Trạm Bơm & STP (Sewage Treatment Plant)",
                     "Khu Hồ Bơi & Cảnh Quan (Main Pool & Landscape)"
                 ],
-                categories: [
-                    { id: "CAT-MSB", name: "Tủ điện chính hạ thế (MSB / ACB)", color: "#007AFF", icon: "shield" },
-                    { id: "CAT-ATS", name: "Máy biến áp, Máy phát & Tủ ATS", color: "#FF9500", icon: "flame" },
-                    { id: "CAT-CHILLER", name: "Hệ thống Chiller & AHU Trung tâm", color: "#34C759", icon: "wind" },
-                    { id: "CAT-DB", name: "Tủ phân phối khu vực (DB / Sub-panel)", color: "#AF52DE", icon: "server" },
-                    { id: "CAT-PUMP", name: "Trạm bơm nước cấp, Bể bơi & STP", color: "#32ADE6", icon: "droplets" },
-                    { id: "CAT-SOLAR", name: "Hệ thống Điện mặt trời (Solar)", color: "#eab308", icon: "sun" }
+                panels: [
+                    {
+                        id: "PNL-MSB-01",
+                        code: "MSB-01",
+                        name: "Tủ điện chính hạ thế MSB-01",
+                        zone: "Phòng Hạ Thế (LV Switchboard Room)",
+                        specs: "3200A • 380V • Form 4b",
+                        devices: [
+                            { id: "DEV-01", name: "MCCB Tổng đầu nguồn 3200A", type: "MCCB", spec: "3200A 4P", status: "ON" },
+                            { id: "DEV-02", name: "Contactor Cấp nguồn Chiller", type: "Contactor", spec: "Schneider LC1F400", status: "ON" },
+                            { id: "DEV-03", name: "Công Tơ Điện Tổng MSB", type: "Công Tơ", spec: "Schneider iEM3250", status: "ON" },
+                            { id: "DEV-04", name: "Timer Đèn chiếu sáng tự động", type: "Timer", spec: "Siemens 7LF4", status: "ON" }
+                        ]
+                    },
+                    {
+                        id: "PNL-DB-VILLA",
+                        code: "DB-VILLA",
+                        name: "Tủ phân phối khu vực Villa",
+                        zone: "Khu Villa (Lagoon & Ocean Villas)",
+                        specs: "400A • 380V",
+                        devices: [
+                            { id: "DEV-10", name: "MCCB Tổng Nhánh Villa 400A", type: "MCCB", spec: "400A 3P", status: "ON" },
+                            { id: "DEV-11", name: "RCBO Bảo vệ nhánh phòng", type: "RCBO", spec: "63A 30mA", status: "ON" },
+                            { id: "DEV-12", name: "MCB Chiếu sáng cảnh quan", type: "MCB", spec: "32A 1P", status: "ON" }
+                        ]
+                    }
                 ],
                 meters: [
                     { id: "EM-MSB01-TOTAL", type: "electric", isMaster: true, code: "EM-MSB01-TOTAL", name: "Công tơ tổng Tủ MSB-01 (Đầu nguồn)", zone: "Phòng Hạ Thế (LV Switchboard Room)", multiplier: 80, unit: "kWh", baseReading: 24500, avgDaily: 4800 },
@@ -1390,14 +1102,10 @@
                     { id: "EM-VILLA-LAGOON", type: "electric", isMaster: false, code: "EM-VILLA-LAGOON", name: "Công tơ Tủ DB Khu Lagoon & Ocean Villas", zone: "Khu Villa (Lagoon & Ocean Villas)", multiplier: 20, unit: "kWh", baseReading: 8520, avgDaily: 820 },
                     { id: "EM-MAIN-KITCHEN", type: "electric", isMaster: false, code: "EM-MAIN-KITCHEN", name: "Công tơ Tòa nhà chính, Bếp & Nhà hàng", zone: "Khu Nhà Hàng & Bếp (Main Building & F&B)", multiplier: 20, unit: "kWh", baseReading: 6190, avgDaily: 680 },
                     { id: "EM-PUMP-STP", type: "electric", isMaster: false, code: "EM-PUMP-STP", name: "Công tơ Trạm Bơm Cấp & Xử lý nước thải STP", zone: "Trạm Bơm & STP (Sewage Treatment Plant)", multiplier: 10, unit: "kWh", baseReading: 5120, avgDaily: 340 },
-                    { id: "EM-POOL-LIGHT", type: "electric", isMaster: false, code: "EM-POOL-LIGHT", name: "Công tơ Hệ thống Bơm Hồ Bơi & Cảnh quan", zone: "Khu Hồ Bơi & Cảnh Quan (Main Pool & Landscape)", multiplier: 10, unit: "kWh", baseReading: 4310, avgDaily: 360 },
 
                     { id: "WM-CITY-MAIN", type: "water", isMaster: true, code: "WM-CITY-MAIN", name: "Đồng hồ tổng Nước Thủy Cục (Đầu nguồn)", zone: "Trạm Bơm Cấp Nước (Domestic Water Station)", multiplier: 1, unit: "m³", baseReading: 18400, avgDaily: 310 },
                     { id: "WM-DOM-BOOSTER", type: "water", isMaster: false, code: "WM-DOM-BOOSTER", name: "Đồng hồ Trạm bơm tăng áp Nước Sinh Hoạt tổng", zone: "Trạm Bơm Cấp Nước (Domestic Water Station)", multiplier: 1, unit: "m³", baseReading: 15200, avgDaily: 285 },
-                    { id: "WM-VILLA-ZONE", type: "water", isMaster: false, code: "WM-VILLA-ZONE", name: "Đồng hồ Nước cấp Khu Lagoon & Ocean Villas", zone: "Khu Villa (Lagoon & Ocean Villas)", multiplier: 1, unit: "m³", baseReading: 5830, avgDaily: 92 },
-                    { id: "WM-KITCHEN-FB", type: "water", isMaster: false, code: "WM-KITCHEN-FB", name: "Đồng hồ Nước Khu Bếp Trung Tâm & Giặt là", zone: "Khu Nhà Hàng & Bếp (Main Building & F&B)", multiplier: 1, unit: "m³", baseReading: 4110, avgDaily: 68 },
-                    { id: "WM-POOL-MAKEUP", type: "water", isMaster: false, code: "WM-POOL-MAKEUP", name: "Đồng hồ Nước cấp bù Hồ Bơi Chính & Lagoon", zone: "Khu Hồ Bơi & Cảnh Quan (Main Pool & Landscape)", multiplier: 1, unit: "m³", baseReading: 3290, avgDaily: 48 },
-                    { id: "WM-STP-OUT", type: "water", isMaster: false, isEffluent: true, code: "WM-STP-OUT", name: "Đồng hồ Nước thải đầu ra sau xử lý (STP Outlet)", zone: "Trạm Bơm & STP (Sewage Treatment Plant)", multiplier: 1, unit: "m³", baseReading: 9750, avgDaily: 210 }
+                    { id: "WM-VILLA-ZONE", type: "water", isMaster: false, code: "WM-VILLA-ZONE", name: "Đồng hồ Nước cấp Khu Lagoon & Ocean Villas", zone: "Khu Villa (Lagoon & Ocean Villas)", multiplier: 1, unit: "m³", baseReading: 5830, avgDaily: 92 }
                 ],
                 readings: {
                     [d6]: {
@@ -1406,13 +1114,9 @@
                         "EM-VILLA-LAGOON": { prev: 8520, curr: 8560, consumption: 800 },
                         "EM-MAIN-KITCHEN": { prev: 6190, curr: 6223, consumption: 660 },
                         "EM-PUMP-STP": { prev: 5120, curr: 5153, consumption: 330 },
-                        "EM-POOL-LIGHT": { prev: 4310, curr: 4345, consumption: 350 },
                         "WM-CITY-MAIN": { prev: 18400, curr: 18705, consumption: 305 },
                         "WM-DOM-BOOSTER": { prev: 15200, curr: 15480, consumption: 280 },
-                        "WM-VILLA-ZONE": { prev: 5830, curr: 5920, consumption: 90 },
-                        "WM-KITCHEN-FB": { prev: 4110, curr: 4176, consumption: 66 },
-                        "WM-POOL-MAKEUP": { prev: 3290, curr: 3336, consumption: 46 },
-                        "WM-STP-OUT": { prev: 9750, curr: 9955, consumption: 205 }
+                        "WM-VILLA-ZONE": { prev: 5830, curr: 5920, consumption: 90 }
                     },
                     [d5]: {
                         "EM-MSB01-TOTAL": { prev: 24558, curr: 24618, consumption: 4800 },
@@ -1420,13 +1124,9 @@
                         "EM-VILLA-LAGOON": { prev: 8560, curr: 8601, consumption: 820 },
                         "EM-MAIN-KITCHEN": { prev: 6223, curr: 6257, consumption: 680 },
                         "EM-PUMP-STP": { prev: 5153, curr: 5187, consumption: 340 },
-                        "EM-POOL-LIGHT": { prev: 4345, curr: 4381, consumption: 360 },
                         "WM-CITY-MAIN": { prev: 18705, curr: 19017, consumption: 312 },
                         "WM-DOM-BOOSTER": { prev: 15480, curr: 15766, consumption: 286 },
-                        "WM-VILLA-ZONE": { prev: 5920, curr: 6012, consumption: 92 },
-                        "WM-KITCHEN-FB": { prev: 4176, curr: 4244, consumption: 68 },
-                        "WM-POOL-MAKEUP": { prev: 3336, curr: 3384, consumption: 48 },
-                        "WM-STP-OUT": { prev: 9955, curr: 10167, consumption: 212 }
+                        "WM-VILLA-ZONE": { prev: 5920, curr: 6012, consumption: 92 }
                     },
                     [d4]: {
                         "EM-MSB01-TOTAL": { prev: 24618, curr: 24677, consumption: 4720 },
@@ -1434,13 +1134,9 @@
                         "EM-VILLA-LAGOON": { prev: 8601, curr: 8641, consumption: 800 },
                         "EM-MAIN-KITCHEN": { prev: 6257, curr: 6290, consumption: 660 },
                         "EM-PUMP-STP": { prev: 5187, curr: 5220, consumption: 330 },
-                        "EM-POOL-LIGHT": { prev: 4381, curr: 4416, consumption: 350 },
                         "WM-CITY-MAIN": { prev: 19017, curr: 19325, consumption: 308 },
                         "WM-DOM-BOOSTER": { prev: 15766, curr: 16048, consumption: 282 },
-                        "WM-VILLA-ZONE": { prev: 6012, curr: 6102, consumption: 90 },
-                        "WM-KITCHEN-FB": { prev: 4244, curr: 4311, consumption: 67 },
-                        "WM-POOL-MAKEUP": { prev: 3384, curr: 3431, consumption: 47 },
-                        "WM-STP-OUT": { prev: 10167, curr: 10375, consumption: 208 }
+                        "WM-VILLA-ZONE": { prev: 6012, curr: 6102, consumption: 90 }
                     },
                     [d3]: {
                         "EM-MSB01-TOTAL": { prev: 24677, curr: 24738, consumption: 4880 },
@@ -1448,13 +1144,9 @@
                         "EM-VILLA-LAGOON": { prev: 8641, curr: 8683, consumption: 840 },
                         "EM-MAIN-KITCHEN": { prev: 6290, curr: 6325, consumption: 700 },
                         "EM-PUMP-STP": { prev: 5220, curr: 5255, consumption: 350 },
-                        "EM-POOL-LIGHT": { prev: 4416, curr: 4453, consumption: 370 },
                         "WM-CITY-MAIN": { prev: 19325, curr: 19640, consumption: 315 },
                         "WM-DOM-BOOSTER": { prev: 16048, curr: 16338, consumption: 290 },
-                        "WM-VILLA-ZONE": { prev: 6102, curr: 6196, consumption: 94 },
-                        "WM-KITCHEN-FB": { prev: 4311, curr: 4381, consumption: 70 },
-                        "WM-POOL-MAKEUP": { prev: 3431, curr: 3480, consumption: 49 },
-                        "WM-STP-OUT": { prev: 10375, curr: 10590, consumption: 215 }
+                        "WM-VILLA-ZONE": { prev: 6102, curr: 6196, consumption: 94 }
                     },
                     [d2]: {
                         "EM-MSB01-TOTAL": { prev: 24738, curr: 24798, consumption: 4800 },
@@ -1462,13 +1154,9 @@
                         "EM-VILLA-LAGOON": { prev: 8683, curr: 8724, consumption: 820 },
                         "EM-MAIN-KITCHEN": { prev: 6325, curr: 6359, consumption: 680 },
                         "EM-PUMP-STP": { prev: 5255, curr: 5289, consumption: 340 },
-                        "EM-POOL-LIGHT": { prev: 4453, curr: 4489, consumption: 360 },
                         "WM-CITY-MAIN": { prev: 19640, curr: 19950, consumption: 310 },
                         "WM-DOM-BOOSTER": { prev: 16338, curr: 16623, consumption: 285 },
-                        "WM-VILLA-ZONE": { prev: 6196, curr: 6288, consumption: 92 },
-                        "WM-KITCHEN-FB": { prev: 4381, curr: 4449, consumption: 68 },
-                        "WM-POOL-MAKEUP": { prev: 3480, curr: 3528, consumption: 48 },
-                        "WM-STP-OUT": { prev: 10590, curr: 10800, consumption: 210 }
+                        "WM-VILLA-ZONE": { prev: 6196, curr: 6288, consumption: 92 }
                     },
                     [d1]: {
                         "EM-MSB01-TOTAL": { prev: 24798, curr: 24859, consumption: 4880 },
@@ -1476,13 +1164,9 @@
                         "EM-VILLA-LAGOON": { prev: 8724, curr: 8765, consumption: 820 },
                         "EM-MAIN-KITCHEN": { prev: 6359, curr: 6393, consumption: 680 },
                         "EM-PUMP-STP": { prev: 5289, curr: 5323, consumption: 340 },
-                        "EM-POOL-LIGHT": { prev: 4489, curr: 4525, consumption: 360 },
                         "WM-CITY-MAIN": { prev: 19950, curr: 20262, consumption: 312 },
                         "WM-DOM-BOOSTER": { prev: 16623, curr: 16910, consumption: 287 },
-                        "WM-VILLA-ZONE": { prev: 6288, curr: 6381, consumption: 93 },
-                        "WM-KITCHEN-FB": { prev: 4449, curr: 4518, consumption: 69 },
-                        "WM-POOL-MAKEUP": { prev: 3528, curr: 3577, consumption: 49 },
-                        "WM-STP-OUT": { prev: 10800, curr: 11012, consumption: 212 }
+                        "WM-VILLA-ZONE": { prev: 6288, curr: 6381, consumption: 93 }
                     },
                     [d0]: {
                         "EM-MSB01-TOTAL": { prev: 24859, curr: 24926, consumption: 5360 },
@@ -1490,27 +1174,11 @@
                         "EM-VILLA-LAGOON": { prev: 8765, curr: 8807, consumption: 840 },
                         "EM-MAIN-KITCHEN": { prev: 6393, curr: 6428, consumption: 700 },
                         "EM-PUMP-STP": { prev: 5323, curr: 5358, consumption: 350 },
-                        "EM-POOL-LIGHT": { prev: 4525, curr: 4562, consumption: 370 },
                         "WM-CITY-MAIN": { prev: 20262, curr: 20612, consumption: 350 },
                         "WM-DOM-BOOSTER": { prev: 16910, curr: 17230, consumption: 320 },
-                        "WM-VILLA-ZONE": { prev: 6381, curr: 6506, consumption: 125 },
-                        "WM-KITCHEN-FB": { prev: 4518, curr: 4588, consumption: 70 },
-                        "WM-POOL-MAKEUP": { prev: 3577, curr: 3639, consumption: 62 },
-                        "WM-STP-OUT": { prev: 11012, curr: 11226, consumption: 214 }
+                        "WM-VILLA-ZONE": { prev: 6381, curr: 6506, consumption: 125 }
                     }
                 },
-                equipment: [
-                    { id: "TR-01", name: "Trạm Biến Áp T1 - 2000kVA", code: "TR-01", categoryId: "CAT-ATS", zone: "Phòng Hạ Thế (LV Switchboard Room)", specs: "2000kVA • 22/0.4kV", status: "ON" },
-                    { id: "GEN-01", name: "Máy Phát Cummins 1500kVA", code: "GEN-01", categoryId: "CAT-ATS", zone: "Phòng Hạ Thế (LV Switchboard Room)", specs: "Cummins 1500kVA 380V", status: "STANDBY" },
-                    { id: "MSB-01", name: "Tủ điện tổng MSB-01 3200A", code: "MSB-01", categoryId: "CAT-MSB", zone: "Phòng Hạ Thế (LV Switchboard Room)", specs: "ACB Masterpact 3200A", status: "ON" },
-                    { id: "DB-CHILLER", name: "Tủ cấp nguồn Chiller", code: "DB-CHILLER", categoryId: "CAT-CHILLER", zone: "Khu Chiller (Central Chiller Plant)", specs: "3 x 350RT Screw Chiller", status: "ON" }
-                ],
-                timers: [
-                    { id: "TM-01", name: "Đèn Cảnh Quan & Lối Đi", panel: "DB-POOL", onTime: "17:45", offTime: "05:30", days: "Hằng ngày", active: true }
-                ],
-                timerLogs: [
-                    { id: "LOG-1", time: "Hôm nay, 07:30", timerName: "Đèn Cảnh Quan", detail: "Cập nhật thời gian Bật/Tắt", user: "Admin" }
-                ],
                 sld: {
                     nodes: [
                         { id: "TR-01", type: "SOURCE", label: "Trạm Biến Áp T1", spec: "2000kVA 22/0.4kV", x: 110, y: 25, state: "ON" },
@@ -1531,38 +1199,18 @@
         function ensureStandardizedDataUpgraded(state) {
             if (!state) return createDefaultResortState();
             const std = createDefaultResortState();
-            if (!state.schemaVersion || state.schemaVersion < 5) {
-                const preservedUsers = state.users || [];
-                const upgradedMeters = (state.meters || std.meters).map(m => {
-                    if (typeof m.isMaster === 'boolean') return m;
-                    return {
-                        ...m,
-                        isMaster: m.id === 'EM-MSB01-TOTAL' || m.id === 'WM-CITY-MAIN' || m.code === 'EM-MSB01-TOTAL' || m.code === 'WM-CITY-MAIN',
-                        isEffluent: m.id === 'WM-STP-OUT' || m.code === 'WM-STP-OUT'
-                    };
-                });
+            if (!state.schemaVersion || state.schemaVersion < 6) {
                 const upgraded = {
                     ...std,
                     ...state,
-                    schemaVersion: 5,
-                    meters: upgradedMeters,
-                    userPermissions: { ...std.userPermissions, ...(state.userPermissions || {}) },
-                    totalResortRooms: state.totalResortRooms || std.totalResortRooms,
-                    electricityTariffVnd: state.electricityTariffVnd || std.electricityTariffVnd,
-                    waterTariffVnd: state.waterTariffVnd || std.waterTariffVnd,
-                    occupancyByDate: { ...std.occupancyByDate, ...(state.occupancyByDate || {}) },
-                    historicalMonthlyBenchmarks: std.historicalMonthlyBenchmarks,
-                    users: preservedUsers,
+                    schemaVersion: 6,
+                    panels: state.panels || std.panels,
+                    meters: state.meters || std.meters,
+                    readings: state.readings || std.readings,
                     lastUpdated: Date.now()
                 };
                 localStorage.setItem(STORAGE_KEY_STATE, JSON.stringify(upgraded));
                 return upgraded;
-            }
-            if (typeof state.anomalyThresholdPercent !== 'number') {
-                state.anomalyThresholdPercent = 20;
-            }
-            if (!state.userPermissions) {
-                state.userPermissions = std.userPermissions;
             }
             return state;
         }
@@ -1576,64 +1224,9 @@
 
         function checkPermission(permKey, actionName = "thực hiện thao tác này") {
             if (hasPermission(permKey)) return true;
-            showToast(`Quyền truy cập bị từ chối: Admin đã khóa quyền "${actionName}" đối với tài khoản User!`, "red");
+            showToast(`Quyền truy cập bị từ chối: Admin đã khóa quyền "${actionName}"!`, "red");
             return false;
         }
-
-        function applyRolePermissionUI() {
-            const isAdmin = currentUser?.role === 'admin';
-            const canRecord = hasPermission('allowRecordMeters');
-            const canManageMeters = hasPermission('allowManageMeters');
-            const canEditConfig = hasPermission('allowEditConfigAndOcc');
-
-            const btnAddMeter = document.getElementById('btnAddMeterToolbar');
-            if (btnAddMeter) btnAddMeter.classList.toggle('opacity-50', !canManageMeters);
-
-            const btnSaveAll = document.getElementById('btnSaveAllMeters');
-            if (btnSaveAll) btnSaveAll.classList.toggle('opacity-50', !canRecord);
-
-            const btnWipeToolbar = document.getElementById('btnWipeReportToolbar');
-            if (btnWipeToolbar) btnWipeToolbar.classList.toggle('hidden', !isAdmin);
-
-            ['cfgTotalRoomsInput', 'cfgElecTariffInput', 'cfgWaterTariffInput', 'occEditPctInput', 'occEditRoomsInput'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.disabled = !canEditConfig;
-            });
-
-            renderRbacPermissionsMatrix();
-        }
-
-        window.pendingDeleteCallback = null;
-        window.openConfirmDeleteModal = function(itemTitle, warningDetail, onConfirmFn) {
-            window.pendingDeleteCallback = onConfirmFn;
-            openModal("⚠️ Cảnh Báo Xác Nhận Xóa", `
-                <div class="space-y-4 text-xs sm:text-sm">
-                    <div class="p-4 rounded-2xl bg-rose-500/15 border-2 border-rose-500/40 text-rose-600 dark:text-rose-300 space-y-1.5">
-                        <div class="font-extrabold text-sm flex items-center gap-2">
-                            <i data-lucide="alert-octagon" class="w-5 h-5 text-rose-500 shrink-0"></i>
-                            <span>Bạn có chắc chắn muốn xóa: ${itemTitle}?</span>
-                        </div>
-                        <p class="text-xs leading-relaxed opacity-90">${warningDetail}</p>
-                    </div>
-                    <div class="flex items-center justify-end gap-2.5 pt-2">
-                        <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs">Hủy</button>
-                        <button type="button" onclick="executeConfirmedDelete()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-lg flex items-center gap-1.5">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            <span>Xác Nhận Xóa</span>
-                        </button>
-                    </div>
-                </div>
-            `);
-        };
-
-        window.executeConfirmedDelete = async function() {
-            const fn = window.pendingDeleteCallback;
-            window.pendingDeleteCallback = null;
-            closeModal();
-            if (typeof fn === 'function') {
-                await fn();
-            }
-        };
 
         function loadLocalState() {
             try {
@@ -1677,10 +1270,8 @@
         let currentChartPeriod = 'day';
         let elecChartInstance = null;
         let waterChartInstance = null;
-        let forecastChartInstance = null;
         let activeMeterTab = 'electric';
         let unsavedMeterInputs = {};
-        let selectedEquipCat = 'ALL';
         let sldZoom = 1;
         let sldPanX = 30;
         let sldPanY = 25;
@@ -1734,7 +1325,7 @@
                     await enableIndexedDbPersistence(db);
                 } catch (e) {}
 
-                const stateDocRef = doc(db, "resortpower_sync", "main_state_v5");
+                const stateDocRef = doc(db, "resortpower_sync", "main_state_v6");
                 unsubscribeRemote = onSnapshot(stateDocRef, (snapshot) => {
                     if (simulatedOffline) return;
                     isFirebaseConnected = true;
@@ -1770,7 +1361,7 @@
 
             try {
                 updateSyncBadgeUI('syncing');
-                const stateDocRef = doc(db, "resortpower_sync", "main_state_v5");
+                const stateDocRef = doc(db, "resortpower_sync", "main_state_v6");
                 await setDoc(stateDocRef, JSON.parse(JSON.stringify(appState)), { merge: true });
                 clearPendingQueue();
                 updateSyncBadgeUI();
@@ -1829,7 +1420,7 @@
             unsavedMeterInputs = {};
             await pushStateToFirebase(false);
             refreshAllViews();
-            showToast("Đã nạp chuẩn danh mục, công tơ Master/Sub & sơ đồ Resort!", "emerald");
+            showToast("Đã nạp chuẩn tủ điện, thiết bị và công tơ Resort!", "emerald");
         };
 
         // Anomaly Detection
@@ -2047,15 +1638,15 @@
             const isAdmin = currentUser.role === 'admin';
             document.getElementById('btnOpenCreateUser').classList.toggle('hidden', !isAdmin);
             document.getElementById('nonAdminNotice').classList.toggle('hidden', isAdmin);
-            applyRolePermissionUI();
+            renderRbacPermissionsMatrix();
         }
 
         // Navigation
         const pageTitles = {
             dashboard: "Dashboard Tổng Quan Điện & Nước",
-            meters: "Ghi Chỉ Số Công Tơ Điện & Nước Hằng Ngày",
+            meters: "Quản Lý Công Tơ & Ghi Chỉ Số Điện Nước",
+            panels: "Quản Lý Tủ Điện & Thiết Bị Điện",
             sld: "Sơ Đồ Điện Một Sợi (Single-Line Diagram)",
-            equipment: "Quản Lý Thiết Bị, Danh Mục & Timer",
             accounts: "Quản Lý Tài Khoản & Phân Quyền"
         };
 
@@ -2080,8 +1671,8 @@
 
             if (pageId === 'dashboard') updateDashboardCharts();
             if (pageId === 'meters') renderMeterTables();
+            if (pageId === 'panels') renderElectricalPanelsPage();
             if (pageId === 'sld') renderSldDiagram();
-            if (pageId === 'equipment') { renderEquipmentList(); renderCustomCategories(); renderTimersAndLogs(); }
             if (pageId === 'accounts') renderUsersTable();
         };
 
@@ -2101,13 +1692,10 @@
             const elecLossPct = masterElecRaw > 0 ? Math.round((elecLossKwh / masterElecRaw) * 1000) / 10 : 0;
 
             const masterWaterMeters = waterMeters.filter(m => m.isMaster);
-            const subWaterSupplyMeters = waterMeters.filter(m => !m.isMaster && !m.isEffluent && m.id !== 'WM-STP-OUT');
-            const allSubWaterMeters = waterMeters.filter(m => !m.isMaster);
+            const subWaterSupplyMeters = waterMeters.filter(m => !m.isMaster);
 
             const masterWaterRaw = masterWaterMeters.reduce((s, m) => s + (Number(dayReadings[m.id]?.consumption) || 0), 0);
-            const subWaterEndUse = subWaterSupplyMeters.reduce((s, m) => s + (Number(dayReadings[m.id]?.consumption) || 0), 0);
-            const subWaterBooster = Number(dayReadings['WM-DOM-BOOSTER']?.consumption) || subWaterEndUse;
-            const subWaterCompared = subWaterBooster > 0 ? subWaterBooster : subWaterEndUse;
+            const subWaterCompared = subWaterSupplyMeters.reduce((s, m) => s + (Number(dayReadings[m.id]?.consumption) || 0), 0);
             const effectiveWaterTotal = masterWaterRaw > 0 ? masterWaterRaw : subWaterCompared;
             const waterLossM3 = masterWaterRaw > 0 ? Math.round((masterWaterRaw - subWaterCompared) * 10) / 10 : 0;
             const waterLossPct = masterWaterRaw > 0 ? Math.round((waterLossM3 / masterWaterRaw) * 1000) / 10 : 0;
@@ -2120,7 +1708,6 @@
                 elecLossPct,
                 masterWaterM3: masterWaterRaw,
                 subWaterM3: subWaterCompared,
-                allSubWaterSum: allSubWaterMeters.reduce((s, m) => s + (Number(dayReadings[m.id]?.consumption) || 0), 0),
                 effectiveWaterTotal,
                 waterLossM3,
                 waterLossPct
@@ -2128,24 +1715,6 @@
         }
 
         // Charts & Dashboard
-        function populateChartFilterDropdowns() {
-            const elecZoneGroup = document.getElementById('elecZoneOptGroup');
-            const elecMeterGroup = document.getElementById('elecMeterOptGroup');
-            const waterZoneGroup = document.getElementById('waterZoneOptGroup');
-            const waterMeterGroup = document.getElementById('waterMeterOptGroup');
-            if (!elecZoneGroup || !elecMeterGroup || !waterZoneGroup || !waterMeterGroup) return;
-
-            const zones = appState.zones || [];
-            elecZoneGroup.innerHTML = zones.map(z => `<option value="zone::${z}">Khu vực: ${z}</option>`).join('');
-            waterZoneGroup.innerHTML = zones.map(z => `<option value="zone::${z}">Khu vực: ${z}</option>`).join('');
-
-            const elecMeters = (appState.meters || []).filter(m => m.type === 'electric');
-            const waterMeters = (appState.meters || []).filter(m => m.type === 'water');
-
-            elecMeterGroup.innerHTML = elecMeters.map(m => `<option value="meter::${m.id}">${m.isMaster ? '[MASTER] ' : '[SUB] '}${m.code} - ${m.name}</option>`).join('');
-            waterMeterGroup.innerHTML = waterMeters.map(m => `<option value="meter::${m.id}">${m.isMaster ? '[MASTER] ' : '[SUB] '}${m.code} - ${m.name}</option>`).join('');
-        }
-
         window.setChartPeriod = function(period) {
             currentChartPeriod = period;
             document.querySelectorAll('.period-btn').forEach(btn => btn.className = "period-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition text-slate-600 dark:text-slate-300");
@@ -2206,7 +1775,9 @@
             document.getElementById('kpiWaterToday').textContent = `${breakdown.effectiveWaterTotal.toLocaleString('vi-VN')} m³`;
             document.getElementById('kpiWaterSub').innerHTML = `Nhánh: <strong>${breakdown.subWaterM3.toLocaleString('vi-VN')} m³</strong> • Lệch: <strong class="${breakdown.waterLossPct > 15 ? 'text-rose-500' : 'text-cyan-500'}">${breakdown.waterLossM3 >= 0 ? '+' : ''}${breakdown.waterLossM3} m³ (${breakdown.waterLossPct}%)</strong>`;
 
-            document.getElementById('kpiEquipmentCount').textContent = (appState.equipment || []).length;
+            let totalDevicesCount = 0;
+            (appState.panels || []).forEach(p => totalDevicesCount += (p.devices || []).length);
+            document.getElementById('kpiPanelDeviceCount').textContent = totalDevicesCount;
             document.getElementById('sidebarMeterCount').textContent = (appState.meters || []).length;
 
             renderAnomalyBanner(todayStr);
@@ -2332,322 +1903,259 @@
                     `;
                 }).join('');
             }
-
-            renderOccupancyAndCostAllocationSection();
-            renderLoadForecastSection();
-            renderHistoricalComparisonSection();
         };
 
-        // Occupancy & CPOR
-        function getOccupancyForDate(dateStr) {
-            const totalRooms = Number(appState.totalResortRooms) || 120;
-            const rec = appState.occupancyByDate?.[dateStr];
-            if (rec && typeof rec.occPercent === 'number') {
-                const roomsSold = typeof rec.roomsSold === 'number' ? rec.roomsSold : Math.round((rec.occPercent / 100) * totalRooms);
-                return { occPercent: Math.round(rec.occPercent * 10) / 10, roomsSold: Math.max(0, Math.min(totalRooms, roomsSold)), totalRooms };
-            }
-            return { occPercent: 72.0, roomsSold: Math.round(0.72 * totalRooms), totalRooms };
-        }
+        // ==================== FEATURE: ELECTRICAL PANELS & DEVICES MANAGEMENT ====================
+        window.renderElectricalPanelsPage = function() {
+            const container = document.getElementById('electricalPanelsGrid');
+            if (!container) return;
+            const panels = appState.panels || [];
 
-        function getDayTotalUtilityAndCost(dateStr) {
-            const breakdown = getMasterVsSubBreakdown(dateStr);
-            const elecKwh = breakdown.effectiveElecTotal;
-            const waterM3 = breakdown.effectiveWaterTotal;
-            const elecTariff = Number(appState.electricityTariffVnd) || 2850;
-            const waterTariff = Number(appState.waterTariffVnd) || 18500;
-
-            const elecCost = Math.round(elecKwh * elecTariff);
-            const waterCost = Math.round(waterM3 * waterTariff);
-            const totalCost = elecCost + waterCost;
-
-            const occInfo = getOccupancyForDate(dateStr);
-            const roomsSoldSafe = Math.max(1, occInfo.roomsSold);
-
-            return {
-                dateStr, elecKwh, waterM3, elecCost, waterCost, totalCost,
-                occPercent: occInfo.occPercent, roomsSold: occInfo.roomsSold, totalRooms: occInfo.totalRooms,
-                kwhPerOccupiedRoom: Math.round((elecKwh / roomsSoldSafe) * 100) / 100,
-                m3PerOccupiedRoom: Math.round((waterM3 / roomsSoldSafe) * 100) / 100,
-                elecCostPerRoom: Math.round(elecCost / roomsSoldSafe),
-                waterCostPerRoom: Math.round(waterCost / roomsSoldSafe),
-                totalCostPerOccupiedRoom: Math.round(totalCost / roomsSoldSafe),
-                totalCostPerAvailableRoom: Math.round(totalCost / Math.max(1, occInfo.totalRooms))
-            };
-        }
-
-        window.saveResortRoomAndTariffConfig = async function() {
-            if (!checkPermission('allowEditConfigAndOcc', 'Cấu hình phòng & đơn giá')) return;
-            appState.totalResortRooms = Math.max(1, parseInt(document.getElementById('cfgTotalRoomsInput')?.value, 10) || 120);
-            appState.electricityTariffVnd = Math.max(0, parseFloat(document.getElementById('cfgElecTariffInput')?.value) || 2850);
-            appState.waterTariffVnd = Math.max(0, parseFloat(document.getElementById('cfgWaterTariffInput')?.value) || 18500);
-
-            renderOccupancyAndCostAllocationSection();
-            renderLoadForecastSection();
-            renderHistoricalComparisonSection();
-            await pushStateToFirebase(false);
-            showToast("Đã lưu cấu hình phòng & đơn giá!", "emerald");
-        };
-
-        window.handleOccDateSelectionChange = function() {
-            const dateVal = document.getElementById('occEditDateInput')?.value || getPastDateStr(0);
-            const info = getOccupancyForDate(dateVal);
-            document.getElementById('occEditPctInput').value = info.occPercent;
-            document.getElementById('occEditRoomsInput').value = info.roomsSold;
-            document.getElementById('occSelectedDateLabel').textContent = `Ngày ${dateVal}`;
-        };
-
-        window.syncOccRoomsFromPct = function(pctVal) {
-            const totalRooms = Number(appState.totalResortRooms) || 120;
-            const pct = Math.min(100, Math.max(0, parseFloat(pctVal) || 0));
-            document.getElementById('occEditRoomsInput').value = Math.round((pct / 100) * totalRooms);
-        };
-
-        window.syncOccPctFromRooms = function(roomsVal) {
-            const totalRooms = Number(appState.totalResortRooms) || 120;
-            const rooms = Math.min(totalRooms, Math.max(0, parseInt(roomsVal, 10) || 0));
-            document.getElementById('occEditPctInput').value = Math.round((rooms / totalRooms) * 1000) / 10;
-        };
-
-        window.saveDailyOccupancyRecord = async function() {
-            if (!checkPermission('allowEditConfigAndOcc', 'Cập nhật %OCC')) return;
-            const dateVal = document.getElementById('occEditDateInput')?.value || getPastDateStr(0);
-            const totalRooms = Number(appState.totalResortRooms) || 120;
-            const pct = Math.min(100, Math.max(0, parseFloat(document.getElementById('occEditPctInput')?.value) || 0));
-            const rooms = Math.min(totalRooms, Math.max(0, parseInt(document.getElementById('occEditRoomsInput')?.value, 10) || 0));
-
-            if (!appState.occupancyByDate) appState.occupancyByDate = {};
-            appState.occupancyByDate[dateVal] = { occPercent: pct, roomsSold: rooms, updatedAt: Date.now() };
-
-            renderOccupancyAndCostAllocationSection();
-            renderLoadForecastSection();
-            await pushStateToFirebase(false);
-            showToast(`Đã lưu %OCC ngày ${dateVal}: ${pct}%`, "emerald");
-        };
-
-        window.handleInlineTableOccChange = async function(dateStr, rawPct) {
-            if (!checkPermission('allowEditConfigAndOcc', 'Cập nhật %OCC')) return;
-            const totalRooms = Number(appState.totalResortRooms) || 120;
-            const pct = Math.min(100, Math.max(0, parseFloat(rawPct) || 0));
-            const rooms = Math.round((pct / 100) * totalRooms);
-
-            if (!appState.occupancyByDate) appState.occupancyByDate = {};
-            appState.occupancyByDate[dateStr] = { occPercent: pct, roomsSold: rooms, updatedAt: Date.now() };
-            renderOccupancyAndCostAllocationSection();
-            await pushStateToFirebase(true);
-            showToast(`Đã cập nhật %OCC ngày ${dateStr}`, "blue");
-        };
-
-        function renderOccupancyAndCostAllocationSection() {
-            const totalRoomsEl = document.getElementById('cfgTotalRoomsInput');
-            const elecTariffEl = document.getElementById('cfgElecTariffInput');
-            const waterTariffEl = document.getElementById('cfgWaterTariffInput');
-            if (!totalRoomsEl) return;
-
-            totalRoomsEl.value = appState.totalResortRooms || 120;
-            elecTariffEl.value = appState.electricityTariffVnd || 2850;
-            waterTariffEl.value = appState.waterTariffVnd || 18500;
-
-            const dateEditInput = document.getElementById('occEditDateInput');
-            if (dateEditInput && !dateEditInput.value) { dateEditInput.value = getPastDateStr(0); handleOccDateSelectionChange(); }
-
-            const selectedDate = dateEditInput?.value || getPastDateStr(0);
-            const stats = getDayTotalUtilityAndCost(selectedDate);
-
-            document.getElementById('occKpiTodayPct').textContent = `${stats.occPercent}% OCC`;
-            document.getElementById('occKpiTodayRooms').textContent = `${stats.roomsSold} / ${stats.totalRooms} phòng`;
-            document.getElementById('occKpiElecPerRoom').textContent = `${stats.kwhPerOccupiedRoom} kWh/phòng`;
-            document.getElementById('occKpiElecCostPerRoom').textContent = `${stats.elecCostPerRoom.toLocaleString('vi-VN')} đ`;
-            document.getElementById('occKpiWaterPerRoom').textContent = `${stats.m3PerOccupiedRoom} m³/phòng`;
-            document.getElementById('occKpiWaterCostPerRoom').textContent = `${stats.waterCostPerRoom.toLocaleString('vi-VN')} đ`;
-            document.getElementById('occKpiTotalCostPerRoom').textContent = `${stats.totalCostPerOccupiedRoom.toLocaleString('vi-VN')} đ/phòng`;
-            document.getElementById('occKpiTotalPerAvailableRoom').textContent = `${stats.totalCostPerAvailableRoom.toLocaleString('vi-VN')} đ / PAR`;
-            document.getElementById('occKpiDailyTotalCost').textContent = `${stats.totalCost.toLocaleString('vi-VN')} đ`;
-            document.getElementById('occKpiDailySplit').textContent = `Điện: ${(stats.elecCost/1e6).toFixed(2)}tr • Nước: ${(stats.waterCost/1e6).toFixed(2)}tr`;
-
-            const allDates = Object.keys(appState.readings || {}).sort().slice(-7).reverse();
-            const tbody = document.getElementById('occAllocationTableBody');
-            if (tbody) {
-                tbody.innerHTML = allDates.map(d => {
-                    const row = getDayTotalUtilityAndCost(d);
-                    const p = d.split('-');
-                    return `
-                        <tr class="hover:bg-indigo-500/5 transition">
-                            <td class="py-2.5 px-3 font-mono font-bold">${p[2]}/${p[1]}/${p[0]}</td>
-                            <td class="py-2.5 px-2.5 text-center">
-                                <input type="number" step="0.5" min="0" max="100" value="${row.occPercent}"
-                                    onchange="handleInlineTableOccChange('${d}', this.value)"
-                                    class="w-14 text-right font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-white dark:bg-slate-800 px-2 py-1 rounded border border-indigo-500/30 focus:outline-none">
-                            </td>
-                            <td class="py-2.5 px-2.5 text-center font-mono font-semibold">${row.roomsSold} / ${row.totalRooms}</td>
-                            <td class="py-2.5 px-2.5 text-right font-mono text-amber-500 font-bold">${row.kwhPerOccupiedRoom} kWh</td>
-                            <td class="py-2.5 px-2.5 text-right font-mono text-cyan-500 font-bold">${row.m3PerOccupiedRoom} m³</td>
-                            <td class="py-2.5 px-3 text-right font-mono font-extrabold text-emerald-500">${row.totalCostPerOccupiedRoom.toLocaleString('vi-VN')} đ</td>
-                            <td class="py-2.5 px-3 text-right font-mono font-bold">${row.totalCost.toLocaleString('vi-VN')} đ</td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-        }
-
-        // AI Regression & Historical Comparison (2026 Live vs YoY)
-        function computeLoadRegressionModel() {
-            const dates = Object.keys(appState.readings || {}).sort().slice(-7);
-            const samples = dates.map(d => getDayTotalUtilityAndCost(d));
-            if (samples.length < 2) return { baseElec: 3200, slopeElec: 65, baseWater: 420, slopeWater: 7.5 };
-
-            const n = samples.length;
-            const avgRooms = samples.reduce((s, x) => s + x.roomsSold, 0) / n;
-            const avgElec = samples.reduce((s, x) => s + x.elecKwh, 0) / n;
-            const avgWater = samples.reduce((s, x) => s + x.waterM3, 0) / n;
-
-            let numE = 0, numW = 0, den = 0;
-            samples.forEach(x => {
-                const dx = x.roomsSold - avgRooms;
-                numE += dx * (x.elecKwh - avgElec);
-                numW += dx * (x.waterM3 - avgWater);
-                den += dx * dx;
-            });
-            let slopeElec = den > 1 ? numE / den : 65;
-            let slopeWater = den > 1 ? numW / den : 7.5;
-            const baseElec = Math.max(1500, Math.round(avgElec - slopeElec * avgRooms));
-            const baseWater = Math.max(200, Math.round(avgWater - slopeWater * avgRooms));
-            return { baseElec, slopeElec, baseWater, slopeWater };
-        }
-
-        window.renderLoadForecastSection = function() {
-            const horizon = document.getElementById('forecastHorizonSelect')?.value || '7d';
-            const expectedOcc = Math.min(100, Math.max(5, parseFloat(document.getElementById('forecastExpectedOccInput')?.value) || 78));
-            const totalRooms = Number(appState.totalResortRooms) || 120;
-            const elecTariff = Number(appState.electricityTariffVnd) || 2850;
-            const waterTariff = Number(appState.waterTariffVnd) || 18500;
-            const model = computeLoadRegressionModel();
-
-            let labels = [], elecSeries = [], waterSeries = [];
-            const count = horizon === '7d' ? 7 : (horizon === '30d' ? 30 : 12);
-
-            for (let i = 1; i <= count; i++) {
-                const d = new Date();
-                d.setDate(d.getDate() + (horizon === '12m' ? i * 30 : i));
-                const rooms = Math.round((expectedOcc / 100) * totalRooms);
-                const pElec = Math.round(model.baseElec + model.slopeElec * rooms);
-                const pWater = Math.round(model.baseWater + model.slopeWater * rooms);
-                labels.push(`${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')}`);
-                elecSeries.push(pElec);
-                waterSeries.push(pWater);
+            if (panels.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full glass-panel rounded-3xl p-8 text-center space-y-3">
+                        <i data-lucide="server" class="w-12 h-12 mx-auto text-slate-400"></i>
+                        <h4 class="font-bold text-base">Chưa có tủ điện nào</h4>
+                        <p class="text-xs text-slate-500">Hãy thêm tủ điện phân phối hoặc bấm nút nạp chuẩn hệ thống.</p>
+                        <button onclick="openAddPanelModal()" class="px-4 py-2 bg-blue-600 text-white font-bold text-xs rounded-xl">Thêm Tủ Điện</button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
             }
 
-            const sumElec = elecSeries.reduce((a,b)=>a+b,0);
-            const sumWater = waterSeries.reduce((a,b)=>a+b,0);
-            const cost = sumElec * elecTariff + sumWater * waterTariff;
-
-            document.getElementById('fcTotalElecVal').textContent = `${sumElec.toLocaleString('vi-VN')} kWh`;
-            document.getElementById('fcTotalWaterVal').textContent = `${sumWater.toLocaleString('vi-VN')} m³`;
-            document.getElementById('fcTotalCostVal').textContent = `${(cost/1e6).toFixed(1)} tr.đ`;
-
-            const ctx = document.getElementById('forecastChartCanvas')?.getContext('2d');
-            if (!ctx) return;
-            if (forecastChartInstance) forecastChartInstance.destroy();
-
-            forecastChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels,
-                    datasets: [
-                        { label: 'Điện (kWh)', data: elecSeries, borderColor: '#f59e0b', backgroundColor: 'rgba(245, 158, 11, 0.2)', borderWidth: 2, tension: 0.35, fill: true },
-                        { label: 'Nước (m³)', data: waterSeries, borderColor: '#06b6d4', backgroundColor: 'rgba(6, 182, 212, 0.15)', borderWidth: 2, tension: 0.35, fill: true }
-                    ]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#cbd5e1' } } } }
-            });
-        };
-
-        function getLiveRecordedMonthlyAggregates(yearStr) {
-            const agg = {};
-            for (let m = 1; m <= 12; m++) agg[m] = { daysCount: 0, elecSum: 0, waterSum: 0, occSum: 0 };
-            const allDates = Object.keys(appState.readings || {}).filter(d => d.startsWith(`${yearStr}-`));
-            allDates.forEach(d => {
-                const p = d.split('-');
-                const mIdx = parseInt(p[1], 10);
-                if (mIdx >= 1 && mIdx <= 12) {
-                    const st = getDayTotalUtilityAndCost(d);
-                    if (st.elecKwh > 0 || st.waterM3 > 0) {
-                        agg[mIdx].daysCount += 1;
-                        agg[mIdx].elecSum += st.elecKwh;
-                        agg[mIdx].waterSum += st.waterM3;
-                        agg[mIdx].occSum += st.occPercent;
-                    }
-                }
-            });
-            return agg;
-        }
-
-        window.renderHistoricalComparisonSection = function() {
-            const benchmarks = appState.historicalMonthlyBenchmarks || [];
-            const totalRooms = Number(appState.totalResortRooms) || 120;
-            const elecTariff = Number(appState.electricityTariffVnd) || 2850;
-            const waterTariff = Number(appState.waterTariffVnd) || 18500;
-            const selectedYear = document.getElementById('comparisonYearSelect')?.value || '2026';
-
-            const tbody = document.getElementById('historicalComparisonTableBody');
-            const summaryCards = document.getElementById('momYoySummaryCards');
-            if (!tbody || !summaryCards) return;
-
-            const liveAgg = getLiveRecordedMonthlyAggregates(selectedYear);
-            let totalElec = 0, totalWater = 0;
-
-            tbody.innerHTML = benchmarks.map(b => {
-                const liveM = liveAgg[b.month];
-                const hasLive = liveM && liveM.daysCount > 0;
-                let elecCurr, elecPrev, waterCurr, waterPrev, occ;
-
-                if (selectedYear === '2026') {
-                    elecCurr = hasLive ? (liveM.daysCount >= 25 ? liveM.elecSum : Math.round((liveM.elecSum / liveM.daysCount) * 30)) : (b.elec2026 || b.elec2025);
-                    waterCurr = hasLive ? (liveM.daysCount >= 25 ? liveM.waterSum : Math.round((liveM.waterSum / liveM.daysCount) * 30)) : (b.water2026 || b.water2025);
-                    occ = hasLive ? Math.round((liveM.occSum / liveM.daysCount) * 10) / 10 : (b.occ2026 || b.occ2025);
-                    elecPrev = b.elec2025; waterPrev = b.water2025;
-                } else {
-                    elecCurr = b.elec2025; elecPrev = b.elec2024; waterCurr = b.water2025; waterPrev = b.water2024; occ = b.occ2025;
-                }
-
-                totalElec += elecCurr; totalWater += waterCurr;
-                const elecYoy = Math.round(((elecCurr - elecPrev) / Math.max(1, elecPrev)) * 1000) / 10;
-                const waterYoy = Math.round(((waterCurr - waterPrev) / Math.max(1, waterPrev)) * 1000) / 10;
-                const roomNights = Math.max(1, Math.round((occ / 100) * totalRooms * 30));
-                const cpor = Math.round((elecCurr * elecTariff + waterCurr * waterTariff) / roomNights);
+            container.innerHTML = panels.map(panel => {
+                const devices = panel.devices || [];
+                const devicesHtml = devices.map(dev => `
+                    <div class="p-3 rounded-2xl bg-white/70 dark:bg-slate-800/70 border border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-500/15 text-blue-600 dark:text-blue-300">${dev.type}</span>
+                                <span class="font-bold text-xs truncate">${dev.name}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 font-mono mt-0.5">${dev.spec || 'Không có thông số'}</p>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${dev.status === 'ON' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-slate-500/20 text-slate-400'}">${dev.status || 'ON'}</span>
+                            <button onclick="openEditDeviceModal('${panel.id}', '${dev.id}')" class="p-1.5 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400" title="Sửa thiết bị">
+                                <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                            <button onclick="deleteDeviceFromPanel('${panel.id}', '${dev.id}')" class="p-1.5 rounded-lg hover:bg-red-500/15 text-slate-400 hover:text-red-500" title="Xóa thiết bị">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
 
                 return `
-                    <tr class="hover:bg-emerald-500/5 transition ${hasLive ? 'bg-blue-500/5' : ''}">
-                        <td class="py-2 px-3 font-bold flex items-center gap-1.5">
-                            <span>${b.label}/${selectedYear}</span>
-                            ${hasLive ? `<span class="px-1.5 rounded bg-blue-500/20 text-blue-500 text-[9px] font-extrabold">LIVE</span>` : ''}
-                        </td>
-                        <td class="py-2 px-2 text-center font-mono font-bold text-indigo-500">${occ}%</td>
-                        <td class="py-2 px-2.5 text-right font-mono font-bold text-amber-500">${elecCurr.toLocaleString('vi-VN')}</td>
-                        <td class="py-2 px-2 text-center"><span class="px-1.5 rounded text-[10px] font-bold ${elecYoy > 0 ? 'text-rose-500' : 'text-emerald-500'}">${elecYoy >= 0 ? '+' : ''}${elecYoy}%</span></td>
-                        <td class="py-2 px-2.5 text-right font-mono font-bold text-cyan-500">${waterCurr.toLocaleString('vi-VN')}</td>
-                        <td class="py-2 px-2 text-center"><span class="px-1.5 rounded text-[10px] font-bold ${waterYoy > 0 ? 'text-rose-500' : 'text-emerald-500'}">${waterYoy >= 0 ? '+' : ''}${waterYoy}%</span></td>
-                        <td class="py-2 px-3 text-right font-mono font-extrabold text-emerald-500">${cpor.toLocaleString('vi-VN')} đ</td>
-                    </tr>
+                    <div class="glass-panel rounded-3xl p-5 space-y-4 border border-blue-500/20">
+                        <div class="flex items-start justify-between gap-3 border-b border-slate-200/60 dark:border-slate-700/50 pb-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-2xl bg-blue-500/15 text-blue-500 flex items-center justify-center shrink-0">
+                                    <i data-lucide="server" class="w-5 h-5"></i>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-2">
+                                        <h4 class="font-bold text-base">${panel.name}</h4>
+                                        <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-500/20 text-amber-500">${panel.code}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">${panel.zone} • ${panel.specs || ''}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="openAddDeviceToPanelModal('${panel.id}')" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center gap-1 shadow transition">
+                                    <i data-lucide="plus" class="w-3.5 h-3.5"></i> Thêm Thiết Bị
+                                </button>
+                                <button onclick="deletePanel('${panel.id}')" class="p-2 rounded-xl hover:bg-red-500/15 text-slate-400 hover:text-red-500 transition" title="Xóa tủ điện">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2.5 max-h-72 overflow-y-auto pr-1">
+                            ${devices.length > 0 ? devicesHtml : '<div class="text-xs text-slate-400 text-center py-4">Chưa có thiết bị trong tủ này. Hãy bấm Thêm Thiết Bị.</div>'}
+                        </div>
+                    </div>
                 `;
             }).join('');
-
-            summaryCards.innerHTML = `
-                <div class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800">
-                    <div class="text-[10px] font-bold uppercase text-slate-400">Tổng Điện ${selectedYear}</div>
-                    <div class="text-sm sm:text-base font-extrabold text-amber-500 mt-0.5">${totalElec.toLocaleString('vi-VN')} kWh</div>
-                </div>
-                <div class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800">
-                    <div class="text-[10px] font-bold uppercase text-slate-400">Tổng Nước ${selectedYear}</div>
-                    <div class="text-sm sm:text-base font-extrabold text-cyan-500 mt-0.5">${totalWater.toLocaleString('vi-VN')} m³</div>
-                </div>
-                <div class="p-3 rounded-2xl bg-slate-100 dark:bg-slate-800">
-                    <div class="text-[10px] font-bold uppercase text-slate-400">Trạng Thái</div>
-                    <div class="text-sm sm:text-base font-extrabold text-indigo-500 mt-0.5">Ổn định</div>
-                </div>
-            `;
+            lucide.createIcons();
         };
 
-        // Meter Readings & Tables
+        window.openAddPanelModal = function() {
+            if (!checkPermission('allowManageEquipment', 'Thêm tủ điện')) return;
+            const zoneOpts = (appState.zones || []).map(z => `<option value="${z}">${z}</option>`).join('');
+            openModal("Thêm Tủ Điện Mới", `
+                <form onsubmit="handleCreatePanel(event)" class="space-y-3.5 text-xs sm:text-sm">
+                    <div>
+                        <label class="font-semibold text-slate-500">Mã tủ điện</label>
+                        <input id="newPanelCode" type="text" required placeholder="VD: MSB-02" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Tên tủ điện</label>
+                        <input id="newPanelName" type="text" required placeholder="VD: Tủ điện phân phối phụ tải" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Khu vực lắp đặt</label>
+                        <select id="newPanelZone" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border">${zoneOpts}</select>
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Thông số kỹ thuật chung</label>
+                        <input id="newPanelSpecs" type="text" placeholder="VD: 1600A • 380V" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border">
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-2xl bg-blue-600 text-white font-bold">Lưu Tủ Điện</button>
+                </form>
+            `);
+        };
+
+        window.handleCreatePanel = async function(e) {
+            e.preventDefault();
+            if (!appState.panels) appState.panels = [];
+            appState.panels.push({
+                id: "PNL-" + Date.now(),
+                code: document.getElementById('newPanelCode').value.trim(),
+                name: document.getElementById('newPanelName').value.trim(),
+                zone: document.getElementById('newPanelZone').value,
+                specs: document.getElementById('newPanelSpecs').value.trim(),
+                devices: []
+            });
+            closeModal();
+            renderElectricalPanelDevices();
+            renderElectricalPanelsPage();
+            await pushStateToFirebase(false);
+            showToast("Đã thêm tủ điện mới thành công!", "emerald");
+        };
+
+        window.deletePanel = function(panelId) {
+            if (!checkPermission('allowManageEquipment', 'Xóa tủ điện')) return;
+            openConfirmDeleteModal("Tủ điện", "Xóa tủ điện này cùng toàn bộ thiết bị bên trong.", async () => {
+                appState.panels = (appState.panels || []).filter(p => p.id !== panelId);
+                renderElectricalPanelsPage();
+                await pushStateToFirebase(false);
+                showToast("Đã xóa tủ điện.", "amber");
+            });
+        };
+
+        window.openAddDeviceToPanelModal = function(panelId) {
+            if (!checkPermission('allowManageEquipment', 'Thêm thiết bị vào tủ')) return;
+            const catOptions = STANDARD_DEVICE_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+            openModal("Thêm Thiết Bị Vào Tủ Điện", `
+                <form onsubmit="handleSaveDeviceToPanel(event, '${panelId}')" class="space-y-3.5 text-xs sm:text-sm">
+                    <div>
+                        <label class="font-semibold text-slate-500">Danh mục thiết bị điện</label>
+                        <select id="devCategory" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-bold text-blue-600 dark:text-blue-400">
+                            ${catOptions}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Tên / Vị trí thiết bị</label>
+                        <input id="devName" type="text" required placeholder="VD: MCCB tổng nhánh F&B 250A" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Thông số kỹ thuật (Amper, Cực, Hãng...)</label>
+                        <input id="devSpec" type="text" placeholder="VD: Schneider NSX250N 3P 250A" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-mono">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Trạng thái vận hành</label>
+                        <select id="devStatus" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-bold">
+                            <option value="ON">ON (Đang đóng)</option>
+                            <option value="OFF">OFF (Đang cắt)</option>
+                            <option value="STANDBY">STANDBY (Dự phòng)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-2xl bg-blue-600 text-white font-bold">Thêm Thiết Bị</button>
+                </form>
+            `);
+        };
+
+        window.handleSaveDeviceToPanel = async function(e, panelId) {
+            e.preventDefault();
+            const panel = (appState.panels || []).find(p => p.id === panelId);
+            if (!panel) return;
+
+            if (!panel.devices) panel.devices = [];
+            panel.devices.push({
+                id: "DEV-" + Date.now(),
+                type: document.getElementById('devCategory').value,
+                name: document.getElementById('devName').value.trim(),
+                spec: document.getElementById('devSpec').value.trim(),
+                status: document.getElementById('devStatus').value
+            });
+
+            closeModal();
+            renderElectricalPanelsPage();
+            updateDashboardCharts();
+            await pushStateToFirebase(false);
+            showToast("Đã thêm thiết bị vào tủ điện thành công!", "emerald");
+        };
+
+        window.openEditDeviceModal = function(panelId, devId) {
+            if (!checkPermission('allowManageEquipment', 'Sửa thiết bị trong tủ')) return;
+            const panel = (appState.panels || []).find(p => p.id === panelId);
+            const dev = (panel?.devices || []).find(d => d.id === devId);
+            if (!panel || !dev) return;
+
+            const catOptions = STANDARD_DEVICE_CATEGORIES.map(c => `<option value="${c}" ${dev.type === c ? 'selected' : ''}>${c}</option>`).join('');
+            openModal("Cập Nhật Thiết Bị Tủ Điện", `
+                <form onsubmit="handleUpdateDeviceInPanel(event, '${panelId}', '${devId}')" class="space-y-3.5 text-xs sm:text-sm">
+                    <div>
+                        <label class="font-semibold text-slate-500">Danh mục thiết bị điện</label>
+                        <select id="editDevCategory" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-bold text-blue-600 dark:text-blue-400">
+                            ${catOptions}
+                        </select>
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Tên / Vị trí thiết bị</label>
+                        <input id="editDevName" type="text" required value="${dev.name}" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Thông số kỹ thuật</label>
+                        <input id="editDevSpec" type="text" value="${dev.spec || ''}" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-mono">
+                    </div>
+                    <div>
+                        <label class="font-semibold text-slate-500">Trạng thái</label>
+                        <select id="editDevStatus" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-bold">
+                            <option value="ON" ${dev.status === 'ON' ? 'selected' : ''}>ON</option>
+                            <option value="OFF" ${dev.status === 'OFF' ? 'selected' : ''}>OFF</option>
+                            <option value="STANDBY" ${dev.status === 'STANDBY' ? 'selected' : ''}>STANDBY</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-2xl bg-blue-600 text-white font-bold">Cập Nhật Thiết Bị</button>
+                </form>
+            `);
+        };
+
+        window.handleUpdateDeviceInPanel = async function(e, panelId, devId) {
+            e.preventDefault();
+            const panel = (appState.panels || []).find(p => p.id === panelId);
+            const dev = (panel?.devices || []).find(d => d.id === devId);
+            if (dev) {
+                dev.type = document.getElementById('editDevCategory').value;
+                dev.name = document.getElementById('editDevName').value.trim();
+                dev.spec = document.getElementById('editDevSpec').value.trim();
+                dev.status = document.getElementById('editDevStatus').value;
+            }
+            closeModal();
+            renderElectricalPanelsPage();
+            await pushStateToFirebase(false);
+            showToast("Đã cập nhật thiết bị tủ điện!", "emerald");
+        };
+
+        window.deleteDeviceFromPanel = function(panelId, devId) {
+            if (!checkPermission('allowManageEquipment', 'Xóa thiết bị khỏi tủ')) return;
+            openConfirmDeleteModal("Thiết bị tủ điện", "Xóa thiết bị này khỏi tủ phân phối.", async () => {
+                const panel = (appState.panels || []).find(p => p.id === panelId);
+                if (panel) {
+                    panel.devices = (panel.devices || []).filter(d => d.id !== devId);
+                    renderElectricalPanelsPage();
+                    updateDashboardCharts();
+                    await pushStateToFirebase(false);
+                    showToast("Đã xóa thiết bị khỏi tủ.", "amber");
+                }
+            });
+        };
+
+        // ==================== FEATURE: ENHANCED METER READING & AUTO-CLEAR ====================
         window.switchMeterTab = function(tabType) {
             activeMeterTab = tabType;
             const btnElec = document.getElementById('tab-meter-electric');
@@ -2699,16 +2207,20 @@
                     const savedRec = dayRecords[m.id];
                     const prevVal = getPreviousReadingForMeter(m.id, selectedDate);
                     const draftKey = `${selectedDate}__${m.id}`;
-                    const currVal = unsavedMeterInputs[draftKey] !== undefined ? unsavedMeterInputs[draftKey] : (savedRec ? savedRec.curr : '');
+                    
+                    // Nếu đã lưu hoặc không có draft, ô nhập liệu sẽ tự trả về ô trắng (trống) đúng yêu cầu
+                    const currVal = unsavedMeterInputs[draftKey] !== undefined ? unsavedMeterInputs[draftKey] : '';
 
                     const numericCurr = parseFloat(currVal);
                     const hasValidCurr = !isNaN(numericCurr) && numericCurr >= prevVal;
-                    const consumption = hasValidCurr ? Math.round((numericCurr - prevVal) * (m.multiplier || 1) * 100) / 100 : 0;
+                    const consumption = hasValidCurr ? Math.round((numericCurr - prevVal) * (m.multiplier || 1) * 100) / 100 : (savedRec ? savedRec.consumption : 0);
 
                     if (isElectric) {
-                        if (m.isMaster) masterElecSum += consumption; else subElecSum += consumption;
+                        if (m.isMaster) masterElecSum += (hasValidCurr ? consumption : (savedRec?.consumption || 0));
+                        else subElecSum += (hasValidCurr ? consumption : (savedRec?.consumption || 0));
                     } else {
-                        if (m.isMaster) masterWaterSum += consumption; else if (!m.isEffluent) subWaterSupplySum += consumption;
+                        if (m.isMaster) masterWaterSum += (hasValidCurr ? consumption : (savedRec?.consumption || 0));
+                        else subWaterSupplySum += (hasValidCurr ? consumption : (savedRec?.consumption || 0));
                     }
 
                     const isSaved = savedRec && unsavedMeterInputs[draftKey] === undefined;
@@ -2717,33 +2229,35 @@
 
                     return `
                         <tr id="row-meter-${m.id}" class="${anom.isAnomaly ? 'bg-rose-500/15' : (m.isMaster ? 'bg-amber-500/5' : 'hover:bg-blue-500/5')} transition">
-                            <td class="py-3.5 px-4">
+                            <td class="py-4 px-4">
                                 <div class="flex items-center gap-1.5 flex-wrap">
-                                    <span class="font-bold font-mono">${m.code}</span>
+                                    <span class="font-bold font-mono text-sm">${m.code}</span>
                                     ${roleBadge}
                                 </div>
                                 <div class="text-xs text-slate-500">${m.name}</div>
                             </td>
-                            <td class="py-3.5 px-3"><span class="text-xs px-2.5 py-1 rounded-xl bg-slate-200/70 dark:bg-slate-800">${m.zone.split('(')[0]}</span></td>
-                            <td class="py-3.5 px-3 text-center font-semibold text-xs">×${m.multiplier || 1}</td>
-                            <td class="py-3.5 px-3 text-right font-mono font-bold">${prevVal.toLocaleString('vi-VN')}</td>
-                            <td class="py-3.5 px-4">
+                            <td class="py-4 px-3"><span class="text-xs px-2.5 py-1 rounded-xl bg-slate-200/70 dark:bg-slate-800">${m.zone.split('(')[0]}</span></td>
+                            <td class="py-4 px-3 text-center font-semibold text-xs">×${m.multiplier || 1}</td>
+                            <td class="py-4 px-3 text-right font-mono font-bold text-sm">${prevVal.toLocaleString('vi-VN')}</td>
+                            <td class="py-4 px-4">
+                                <!-- TĂNG KÍCH THƯỚC Ô NHẬP LIỆU Ở PHIÊN BẢN ĐIỆN THOẠI & MÁY TÍNH -->
                                 <input type="number" step="any" inputmode="decimal" id="input-meter-${m.id}" value="${currVal}" ${!canRecord ? 'disabled' : ''}
+                                    placeholder="${savedRec ? 'Đã lưu: ' + savedRec.curr : 'Nhập số mới...'}"
                                     oninput="handleMeterInputChange('${m.id}', '${selectedDate}', ${prevVal}, ${m.multiplier || 1}, this.value)"
-                                    class="w-full px-3.5 py-2.5 rounded-2xl text-right font-mono font-bold text-base bg-white dark:bg-slate-900 border-2 ${anom.isAnomaly ? 'border-rose-500 text-rose-500' : 'border-blue-500/40'} focus:outline-none">
+                                    class="w-full px-4 py-3.5 rounded-2xl text-right font-mono font-extrabold text-lg sm:text-xl bg-white dark:bg-slate-900 border-2 ${anom.isAnomaly ? 'border-rose-500 text-rose-500' : 'border-blue-500/60 shadow-inner'} focus:outline-none focus:ring-2 focus:ring-blue-500">
                             </td>
-                            <td class="py-3.5 px-3 text-right">
-                                <div id="calc-cons-${m.id}" class="font-mono font-extrabold text-base ${anom.isAnomaly ? 'text-rose-500' : (isElectric ? 'text-amber-500' : 'text-cyan-500')}">
+                            <td class="py-4 px-3 text-right">
+                                <div id="calc-cons-${m.id}" class="font-mono font-extrabold text-base sm:text-lg ${anom.isAnomaly ? 'text-rose-500' : (isElectric ? 'text-amber-500' : 'text-cyan-500')}">
                                     ${consumption.toLocaleString('vi-VN')} ${m.unit}
                                 </div>
                             </td>
-                            <td class="py-3.5 px-3 text-center" id="status-cell-${m.id}">
-                                ${anom.isAnomaly ? '<span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-500 text-white">Vượt ngưỡng</span>' : (isSaved ? '<span class="text-emerald-500 font-bold text-xs">Đã lưu</span>' : '<span class="text-amber-500 font-bold text-xs">Chờ lưu</span>')}
+                            <td class="py-4 px-3 text-center" id="status-cell-${m.id}">
+                                ${anom.isAnomaly ? '<span class="px-2 py-0.5 rounded text-[10px] font-extrabold bg-rose-500 text-white">Vượt ngưỡng</span>' : (isSaved ? '<span class="text-emerald-500 font-bold text-xs">✓ Đã lưu</span>' : '<span class="text-amber-500 font-bold text-xs">Chờ nhập</span>')}
                             </td>
-                            <td class="py-3.5 px-4 text-right">
+                            <td class="py-4 px-4 text-right">
                                 <div class="inline-flex items-center gap-1.5">
-                                    <button onclick="saveSingleMeterReading('${m.id}')" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow ${!canRecord ? 'opacity-50' : ''}">Lưu</button>
-                                    <button onclick="deleteMeter('${m.id}')" class="p-2 rounded-xl hover:bg-red-500/15 text-slate-400 hover:text-red-500 ${!canManageMeters ? 'opacity-40' : ''}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                    <button onclick="saveSingleMeterReading('${m.id}')" class="px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold shadow ${!canRecord ? 'opacity-50' : ''}">Lưu</button>
+                                    <button onclick="deleteMeter('${m.id}')" class="p-2.5 rounded-xl hover:bg-red-500/15 text-slate-400 hover:text-red-500 ${!canManageMeters ? 'opacity-40' : ''}" title="Xóa công tơ"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -2756,7 +2270,7 @@
 
             const effectiveElec = masterElecSum > 0 ? masterElecSum : subElecSum;
             document.getElementById('tableTotalElec').textContent = `${effectiveElec.toLocaleString('vi-VN')} kWh`;
-            document.getElementById('tableLossElecSummary').innerHTML = `Tổng nhánh: <strong>${subElecSum.toLocaleString('vi-VN')} kWh</strong> • Tổn hao: <strong>${(masterElecSum - subElecSum)} kWh</strong>`;
+            document.getElementById('tableLossElecSummary').innerHTML = `Tổng nhánh: <strong>${subElecSum.toLocaleString('vi-VN')} kWh</strong>`;
 
             const effectiveWater = masterWaterSum > 0 ? masterWaterSum : subWaterSupplySum;
             document.getElementById('tableTotalWater').textContent = `${effectiveWater.toLocaleString('vi-VN')} m³`;
@@ -2767,7 +2281,6 @@
         window.handleMeterInputChange = function(meterId, dateStr, prevVal, multiplier, rawVal) {
             const draftKey = `${dateStr}__${meterId}`;
             unsavedMeterInputs[draftKey] = rawVal;
-            document.getElementById('meterUnsavedIndicator').classList.remove('hidden');
         };
 
         window.saveSingleMeterReading = async function(meterId) {
@@ -2785,11 +2298,14 @@
             if (!appState.readings[selectedDate]) appState.readings[selectedDate] = {};
             appState.readings[selectedDate][meterId] = { prev: prevVal, curr: rawVal, consumption, updatedAt: Date.now() };
 
+            // Sau khi bấm lưu, trả ô nhập liệu về ô trắng để tiện nhập cho lần sau
             delete unsavedMeterInputs[`${selectedDate}__${meterId}`];
+            inputEl.value = '';
+
             renderMeterTables();
             updateDashboardCharts();
             await pushStateToFirebase();
-            showToast(`Đã lưu công tơ ${meter.code}`, "emerald");
+            showToast(`Đã lưu công tơ ${meter.code} thành công!`, "emerald");
         };
 
         window.saveAllMeterReadings = async function() {
@@ -2806,7 +2322,9 @@
                 if (!isNaN(currVal) && currVal >= prevVal) {
                     const consumption = Math.round((currVal - prevVal) * (m.multiplier || 1) * 100) / 100;
                     appState.readings[selectedDate][m.id] = { prev: prevVal, curr: currVal, consumption, updatedAt: Date.now() };
+                    
                     delete unsavedMeterInputs[`${selectedDate}__${m.id}`];
+                    inputEl.value = ''; // Trả về ô trắng sau khi lưu
                     count++;
                 }
             });
@@ -2815,7 +2333,7 @@
                 renderMeterTables();
                 updateDashboardCharts();
                 await pushStateToFirebase();
-                showToast(`Đã lưu thành công ${count} công tơ!`, "emerald");
+                showToast(`Đã lưu thành công ${count} công tơ & làm trống ô nhập liệu!`, "emerald");
             } else {
                 showToast("Không có chỉ số hợp lệ nào để lưu.", "amber");
             }
@@ -2824,19 +2342,19 @@
         window.openAddMeterModal = function() {
             if (!checkPermission('allowManageMeters', 'Thêm công tơ mới')) return;
             const zonesOptions = (appState.zones || []).map(z => `<option value="${z}">${z}</option>`).join('');
-            openModal("Thêm Công Tơ Điện / Nước", `
+            openModal("Thêm Công Tơ Điện / Nước Mới", `
                 <form onsubmit="handleCreateMeter(event)" class="space-y-3.5 text-xs sm:text-sm">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="font-semibold text-slate-500">Loại</label>
-                            <select id="newMeterType" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
+                            <select id="newMeterType" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-bold">
                                 <option value="electric">⚡ Điện (kWh)</option>
                                 <option value="water">💧 Nước (m³)</option>
                             </select>
                         </div>
                         <div>
                             <label class="font-semibold text-slate-500">Phân loại</label>
-                            <select id="newMeterIsMaster" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
+                            <select id="newMeterIsMaster" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-bold">
                                 <option value="false">Nhánh (Sub-meter)</option>
                                 <option value="true">★ Đầu nguồn (Master)</option>
                             </select>
@@ -2844,32 +2362,68 @@
                     </div>
                     <div>
                         <label class="font-semibold text-slate-500">Mã công tơ</label>
-                        <input id="newMeterCode" type="text" required placeholder="VD: EM-VILLA-09" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
+                        <input id="newMeterCode" type="text" required placeholder="VD: EM-VILLA-09" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
                     </div>
                     <div>
                         <label class="font-semibold text-slate-500">Tên công tơ / Vị trí</label>
-                        <input id="newMeterName" type="text" required placeholder="VD: Công tơ Villa 45" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border">
+                        <input id="newMeterName" type="text" required placeholder="VD: Công tơ Villa 45" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="font-semibold text-slate-500">Khu vực</label>
-                            <select id="newMeterZone" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border">${zonesOptions}</select>
+                            <select id="newMeterZone" class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border">${zonesOptions}</select>
                         </div>
                         <div>
                             <label class="font-semibold text-slate-500">Hệ số nhân</label>
-                            <input id="newMeterMult" type="number" step="any" value="1" required class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
+                            <input id="newMeterMult" type="number" step="any" value="1" required class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-bold">
                         </div>
                     </div>
                     <div>
                         <label class="font-semibold text-slate-500">Số bàn giao ban đầu</label>
-                        <input id="newMeterBase" type="number" step="any" value="0" required class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
+                        <input id="newMeterBase" type="number" step="any" value="0" required class="w-full mt-1 px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
                     </div>
                     <button type="submit" class="w-full py-3 rounded-2xl bg-blue-600 text-white font-bold">Lưu Công Tơ</button>
                 </form>
             `);
         };
 
-        // Excel & CSV Export
+        window.handleCreateMeter = async function(e) {
+            e.preventDefault();
+            const type = document.getElementById('newMeterType').value;
+            const isMaster = document.getElementById('newMeterIsMaster').value === 'true';
+            const code = document.getElementById('newMeterCode').value.trim();
+            const name = document.getElementById('newMeterName').value.trim();
+            const zone = document.getElementById('newMeterZone').value;
+            const multiplier = parseFloat(document.getElementById('newMeterMult').value) || 1;
+            const baseReading = parseFloat(document.getElementById('newMeterBase').value) || 0;
+
+            if (!appState.meters) appState.meters = [];
+            appState.meters.push({
+                id: `${type === 'electric' ? 'EM' : 'WM'}-${Date.now()}`,
+                type, isMaster, code, name, zone, multiplier,
+                unit: type === 'electric' ? 'kWh' : 'm³',
+                baseReading, avgDaily: 100
+            });
+
+            closeModal();
+            renderMeterTables();
+            updateDashboardCharts();
+            await pushStateToFirebase(false);
+            showToast("Đã thêm công tơ mới thành công!", "emerald");
+        };
+
+        window.deleteMeter = function(meterId) {
+            if (!checkPermission('allowManageMeters', 'Xóa công tơ')) return;
+            openConfirmDeleteModal("Công tơ / Đồng hồ nước", "Xóa công tơ này khỏi hệ thống quản lý.", async () => {
+                appState.meters = (appState.meters || []).filter(m => m.id !== meterId);
+                renderMeterTables();
+                updateDashboardCharts();
+                await pushStateToFirebase(false);
+                showToast("Đã xóa công tơ.", "amber");
+            });
+        };
+
+        // Excel Export
         window.exportResortExcelWorkbook = function() {
             const selectedDate = document.getElementById('meterReadingDate')?.value || getPastDateStr(0);
             const dayRecords = (appState.readings && appState.readings[selectedDate]) || {};
@@ -2888,10 +2442,6 @@
         };
 
         window.downloadExcelTemplate = function() { exportResortExcelWorkbook(); };
-        window.handleImportExcelFile = function(e) {
-            if (!checkPermission('allowImportExcel', 'Nhập file Excel')) return;
-            showToast("Đang xử lý file nhập...", "blue");
-        };
 
         // Single-Line Diagram (SLD)
         function applySldTransform() {
@@ -3032,153 +2582,6 @@
         };
         window.saveSldLayout = async function() { await pushStateToFirebase(); showToast("Đã lưu sơ đồ điện 1 sợi!", "emerald"); };
 
-        // Equipment & Timers
-        window.switchEquipSubTab = function(t) {
-            ['list', 'categories', 'timers'].forEach(sub => {
-                const btn = document.getElementById(`eqtab-${sub}`);
-                if (btn) btn.className = sub === t ? "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-blue-600 text-white shadow" : "px-4 py-2 rounded-xl text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300";
-            });
-            document.getElementById('equipListContainer').classList.toggle('hidden', t !== 'list');
-            document.getElementById('equipCategoriesContainer').classList.toggle('hidden', t !== 'categories');
-            document.getElementById('equipTimersContainer').classList.toggle('hidden', t !== 'timers');
-        };
-
-        window.filterEquipmentByCategory = function(catId) { selectedEquipCat = catId; renderEquipmentList(); };
-        window.renderEquipmentList = function() {
-            const pillsEl = document.getElementById('categoryFilterPills');
-            const gridEl = document.getElementById('equipmentCardsGrid');
-            if (!pillsEl || !gridEl) return;
-
-            const cats = appState.categories || [];
-            pillsEl.innerHTML = `<button onclick="filterEquipmentByCategory('ALL')" class="px-3 py-1.5 rounded-xl text-xs font-bold ${selectedEquipCat==='ALL'?'bg-blue-600 text-white':'bg-slate-200 dark:bg-slate-800'}">Tất cả</button>` +
-                cats.map(c => `<button onclick="filterEquipmentByCategory('${c.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold ${selectedEquipCat===c.id?'bg-blue-600 text-white':'bg-slate-200 dark:bg-slate-800'}">${c.name}</button>`).join('');
-
-            const filtered = (appState.equipment || []).filter(e => selectedEquipCat === 'ALL' || e.categoryId === selectedEquipCat);
-            gridEl.innerHTML = filtered.map(eq => `
-                <div class="glass-card rounded-3xl p-4 flex flex-col justify-between gap-3">
-                    <div>
-                        <div class="flex items-center justify-between"><span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/20 text-blue-500">${eq.code}</span><span class="text-[10px] font-bold text-emerald-500">● ${eq.status}</span></div>
-                        <h4 class="font-bold text-sm mt-1">${eq.name}</h4>
-                        <p class="text-xs text-slate-500 mt-0.5">${eq.zone}</p>
-                        <p class="text-xs font-mono mt-2 bg-slate-100 dark:bg-slate-800 p-2 rounded">${eq.specs}</p>
-                    </div>
-                    <div class="flex justify-end gap-2 pt-2 border-t">
-                        <button onclick="deleteEquipment('${eq.id}')" class="px-3 py-1 bg-red-500/15 text-red-500 text-xs font-bold rounded">Xóa</button>
-                    </div>
-                </div>
-            `).join('');
-            lucide.createIcons();
-        };
-
-        window.openEquipmentModal = function() {
-            if (!checkPermission('allowManageEquipment', 'Thêm thiết bị')) return;
-            const zoneOpts = (appState.zones || []).map(z => `<option value="${z}">${z}</option>`).join('');
-            openModal("Thêm Thiết Bị Mới", `
-                <form onsubmit="handleSaveEquipment(event)" class="space-y-3 text-xs">
-                    <div><label>Mã thiết bị:</label><input id="eqCode" type="text" required class="w-full p-2 rounded border mt-1"></div>
-                    <div><label>Tên thiết bị:</label><input id="eqName" type="text" required class="w-full p-2 rounded border mt-1"></div>
-                    <div><label>Khu vực:</label><select id="eqZone" class="w-full p-2 rounded border mt-1">${zoneOpts}</select></div>
-                    <div><label>Thông số:</label><input id="eqSpecs" type="text" required class="w-full p-2 rounded border mt-1"></div>
-                    <button type="submit" class="w-full py-2 bg-blue-600 text-white font-bold rounded">Lưu Thiết Bị</button>
-                </form>
-            `);
-        };
-
-        window.handleSaveEquipment = async function(e) {
-            e.preventDefault();
-            appState.equipment.push({
-                id: "EQ-" + Date.now(),
-                code: document.getElementById('eqCode').value,
-                name: document.getElementById('eqName').value,
-                categoryId: "CAT-MSB",
-                zone: document.getElementById('eqZone').value,
-                specs: document.getElementById('eqSpecs').value,
-                status: "ON"
-            });
-            closeModal(); renderEquipmentList(); await pushStateToFirebase(); showToast("Đã thêm thiết bị mới!", "emerald");
-        };
-
-        window.deleteEquipment = function(id) {
-            if (!checkPermission('allowManageEquipment', 'Xóa thiết bị')) return;
-            openConfirmDeleteModal("Thiết bị kỹ thuật", "Xóa thiết bị khỏi danh mục quản lý.", async () => {
-                appState.equipment = (appState.equipment || []).filter(e => e.id !== id);
-                renderEquipmentList(); await pushStateToFirebase(); showToast("Đã xóa thiết bị.", "amber");
-            });
-        };
-
-        window.renderCustomCategories = function() {
-            const container = document.getElementById('customCategoriesGrid');
-            if (!container) return;
-            container.innerHTML = (appState.categories || []).map(c => `
-                <div class="p-3 rounded-2xl bg-white dark:bg-slate-800 border flex items-center justify-between">
-                    <span class="font-bold text-xs">${c.name}</span>
-                    <button onclick="deleteCategory('${c.id}')" class="text-red-500 text-xs font-bold">Xóa</button>
-                </div>
-            `).join('');
-        };
-
-        window.openCategoryModal = function() {
-            if (!checkPermission('allowManageEquipment', 'Tạo danh mục')) return;
-            openModal("Tạo Danh Mục", `
-                <form onsubmit="handleCreateCategory(event)" class="space-y-3 text-xs">
-                    <div><label>Tên danh mục:</label><input id="catName" type="text" required class="w-full p-2 rounded border mt-1"></div>
-                    <button type="submit" class="w-full py-2 bg-purple-600 text-white font-bold rounded">Tạo</button>
-                </form>
-            `);
-        };
-        window.handleCreateCategory = async function(e) {
-            e.preventDefault();
-            appState.categories.push({ id: "CAT-" + Date.now(), name: document.getElementById('catName').value, color: "#3b82f6" });
-            closeModal(); renderCustomCategories(); await pushStateToFirebase(); showToast("Đã tạo danh mục!", "emerald");
-        };
-        window.deleteCategory = function(catId) {
-            if (!checkPermission('allowManageEquipment', 'Xóa danh mục')) return;
-            openConfirmDeleteModal("Danh mục thiết bị", "Xóa danh mục này.", async () => {
-                appState.categories = (appState.categories || []).filter(c => c.id !== catId);
-                renderCustomCategories(); await pushStateToFirebase(); showToast("Đã xóa danh mục.", "amber");
-            });
-        };
-
-        window.renderTimersAndLogs = function() {
-            const listEl = document.getElementById('timersListGrid');
-            const logEl = document.getElementById('timerHistoryLog');
-            if (!listEl) return;
-            listEl.innerHTML = (appState.timers || []).map(t => `
-                <div class="p-3 rounded-2xl bg-white dark:bg-slate-800 border flex justify-between items-center text-xs">
-                    <div><strong>${t.name}</strong><br><span class="text-slate-400">Bật: ${t.onTime} - Tắt: ${t.offTime}</span></div>
-                    <span class="text-emerald-500 font-bold">Đang bật</span>
-                </div>
-            `).join('');
-            if (logEl) {
-                logEl.innerHTML = (appState.timerLogs || []).map(l => `
-                    <div class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs">
-                        <div class="text-slate-400 text-[10px]">${l.time}</div>
-                        <div class="font-bold">${l.timerName}</div>
-                        <div class="text-slate-500">${l.detail}</div>
-                    </div>
-                `).join('');
-            }
-        };
-
-        window.openTimerModal = function() {
-            if (!checkPermission('allowManageEquipment', 'Cài đặt Timer')) return;
-            openModal("Cài Đặt Timer Mới", `
-                <form onsubmit="handleSaveTimer(event)" class="space-y-3 text-xs">
-                    <div><label>Tên lộ trình:</label><input id="tmName" type="text" required class="w-full p-2 rounded border mt-1"></div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div><label>Bật:</label><input id="tmOn" type="time" value="18:00" required class="w-full p-2 rounded border mt-1"></div>
-                        <div><label>Tắt:</label><input id="tmOff" type="time" value="06:00" required class="w-full p-2 rounded border mt-1"></div>
-                    </div>
-                    <button type="submit" class="w-full py-2 bg-amber-500 text-white font-bold rounded">Lưu Timer</button>
-                </form>
-            `);
-        };
-        window.handleSaveTimer = async function(e) {
-            e.preventDefault();
-            appState.timers.push({ id: "TM-" + Date.now(), name: document.getElementById('tmName').value, panel: "DB-POOL", onTime: document.getElementById('tmOn').value, offTime: document.getElementById('tmOff').value, days: "Hằng ngày", active: true });
-            closeModal(); renderTimersAndLogs(); await pushStateToFirebase(); showToast("Đã lưu Timer!", "emerald");
-        };
-
         // Accounts & RBAC
         window.renderUsersTable = function() {
             const tbody = document.getElementById('usersTableBody');
@@ -3227,11 +2630,10 @@
 
         const rbacDefinitions = [
             { key: 'allowRecordMeters', title: 'Ghi Chỉ Số Công Tơ Hằng Ngày', desc: 'Cho phép User nhập và lưu chỉ số' },
-            { key: 'allowEditConfigAndOcc', title: 'Cập Nhật %OCC & Đơn Giá', desc: 'Cho phép User chỉnh sửa công suất phòng' },
             { key: 'allowImportExcel', title: 'Nhập Dữ Liệu Từ Excel / CSV', desc: 'Cho phép User tải file chốt số hàng loạt' },
             { key: 'allowManageMeters', title: 'Thêm Hoặc Xóa Công Tơ', desc: 'Cho phép User quản lý danh mục công tơ' },
             { key: 'allowEditSld', title: 'Thao Tác Trên Sơ Đồ 1 Sợi (SLD)', desc: 'Cho phép User đóng/cắt ACB trên sơ đồ' },
-            { key: 'allowManageEquipment', title: 'Quản Lý Thiết Bị & Timer', desc: 'Cho phép User quản lý thiết bị và lịch hẹn giờ' }
+            { key: 'allowManageEquipment', title: 'Quản Lý Tủ Điện & Thiết Bị', desc: 'Cho phép User thêm bớt thiết bị trong tủ' }
         ];
 
         window.renderRbacPermissionsMatrix = function() {
@@ -3266,7 +2668,7 @@
             if (currentUser?.role !== 'admin') { showToast("Chỉ Admin mới có quyền làm trắng báo cáo!", "red"); return; }
             openModal("Làm Trắng Dữ Liệu Báo Cáo", `
                 <form onsubmit="handleExecuteWipeReportData(event)" class="space-y-3 text-xs">
-                    <div class="p-3 rounded-xl bg-rose-500/15 text-rose-500">Hành động này sẽ xóa toàn bộ lịch sử ghi chỉ số và %OCC.</div>
+                    <div class="p-3 rounded-xl bg-rose-500/15 text-rose-500">Hành động này sẽ xóa toàn bộ lịch sử ghi chỉ số công tơ.</div>
                     <div><label>Mật khẩu Admin xác nhận:</label><input id="wipePass" type="password" required class="w-full p-2 rounded border mt-1"></div>
                     <button type="submit" class="w-full py-2 bg-rose-600 text-white font-bold rounded">Xác Nhận Làm Trắng</button>
                 </form>
@@ -3277,7 +2679,7 @@
             const pass = document.getElementById('wipePass').value;
             const hash = await hashPassword(pass, currentUser.username);
             if (hash !== currentUser.passwordHash) { showToast("Mật khẩu không chính xác!", "red"); return; }
-            appState.readings = {}; appState.occupancyByDate = {}; unsavedMeterInputs = {};
+            appState.readings = {}; unsavedMeterInputs = {};
             closeModal(); refreshAllViews(); await pushStateToFirebase(false); showToast("Đã làm trắng dữ liệu báo cáo!", "emerald");
         };
 
@@ -3315,6 +2717,38 @@
             reader.readAsText(file);
         };
 
+        window.pendingDeleteCallback = null;
+        window.openConfirmDeleteModal = function(itemTitle, warningDetail, onConfirmFn) {
+            window.pendingDeleteCallback = onConfirmFn;
+            openModal("⚠️ Cảnh Báo Xác Nhận Xóa", `
+                <div class="space-y-4 text-xs sm:text-sm">
+                    <div class="p-4 rounded-2xl bg-rose-500/15 border-2 border-rose-500/40 text-rose-600 dark:text-rose-300 space-y-1.5">
+                        <div class="font-extrabold text-sm flex items-center gap-2">
+                            <i data-lucide="alert-octagon" class="w-5 h-5 text-rose-500 shrink-0"></i>
+                            <span>Bạn có chắc chắn muốn xóa: ${itemTitle}?</span>
+                        </div>
+                        <p class="text-xs leading-relaxed opacity-90">${warningDetail}</p>
+                    </div>
+                    <div class="flex items-center justify-end gap-2.5 pt-2">
+                        <button type="button" onclick="closeModal()" class="px-4 py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs">Hủy</button>
+                        <button type="button" onclick="executeConfirmedDelete()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs shadow-lg flex items-center gap-1.5">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            <span>Xác Nhận Xóa</span>
+                        </button>
+                    </div>
+                </div>
+            `);
+        };
+
+        window.executeConfirmedDelete = async function() {
+            const fn = window.pendingDeleteCallback;
+            window.pendingDeleteCallback = null;
+            closeModal();
+            if (typeof fn === 'function') {
+                await fn();
+            }
+        };
+
         window.openModal = function(title, body) {
             document.getElementById('modalTitle').textContent = title;
             document.getElementById('modalBody').innerHTML = body;
@@ -3335,13 +2769,10 @@
         };
 
         function refreshAllViews() {
-            populateChartFilterDropdowns();
             renderMeterTables();
             updateDashboardCharts();
+            renderElectricalPanelsPage();
             renderSldDiagram();
-            renderEquipmentList();
-            renderCustomCategories();
-            renderTimersAndLogs();
             renderUsersTable();
             renderRbacPermissionsMatrix();
         }
