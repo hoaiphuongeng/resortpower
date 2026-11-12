@@ -945,6 +945,11 @@
                             <input type="date" id="meterReadingDate" onchange="renderMeterTables()" class="bg-transparent text-xs sm:text-sm font-bold focus:outline-none">
                         </div>
 
+                        <button onclick="openMeterZonesModal()" class="px-3.5 py-2.5 rounded-2xl bg-purple-500/15 text-purple-600 dark:text-purple-300 hover:bg-purple-500/25 text-xs font-semibold flex items-center gap-1.5 transition">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                            <span>Khu vực</span>
+                        </button>
+
                         <button id="btnAddMeterToolbar" onclick="openAddMeterModal()" class="px-3.5 py-2.5 rounded-2xl bg-slate-200/80 dark:bg-slate-800 hover:bg-slate-300 text-xs font-semibold flex items-center gap-1.5 transition">
                             <i data-lucide="plus-circle" class="w-4 h-4 text-blue-500"></i>
                             <span>Thêm công tơ</span>
@@ -975,6 +980,15 @@
                     </div>
 
                     <div class="flex flex-wrap items-center gap-2">
+                        <label class="flex items-center gap-1.5 px-2.5 py-2 rounded-xl bg-slate-200/70 dark:bg-slate-800 text-[11px] font-bold">
+                            <span class="text-slate-500">Phạm vi</span>
+                            <select id="reportPeriodSelect" class="bg-transparent font-bold focus:outline-none">
+                                <option value="day">Ngày</option>
+                                <option value="week">Tuần</option>
+                                <option value="month">Tháng</option>
+                                <option value="year">Năm</option>
+                            </select>
+                        </label>
                         <input type="file" id="excelFileInput" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleImportExcelFile(event)">
 
                         <button onclick="downloadExcelTemplate()" class="px-3 py-2 rounded-xl bg-slate-200/80 dark:bg-slate-800 text-xs font-semibold flex items-center gap-1.5 transition">
@@ -987,6 +1001,10 @@
                             <span>Nhập Excel</span>
                         </button>
 
+                        <button onclick="openReportTariffsModal()" class="px-3.5 py-2 rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-300 border border-amber-500/25 text-xs font-bold flex items-center gap-1.5 transition">
+                            <i data-lucide="badge-dollar-sign" class="w-3.5 h-3.5"></i>
+                            <span>Giá theo giai đoạn</span>
+                        </button>
                         <button onclick="exportResortExcelWorkbook()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold flex items-center gap-1.5 shadow transition">
                             <i data-lucide="download" class="w-3.5 h-3.5"></i>
                             <span>Xuất Excel Đa Sheet</span>
@@ -1457,6 +1475,9 @@
                 totalResortRooms: 120,
                 electricityTariffVnd: 2850,
                 waterTariffVnd: 18500,
+                reportTariffPeriods: [
+                    { id: 'TARIFF-DEFAULT', from: '2000-01-01', to: '2099-12-31', electricity: 2850, water: 18500 }
+                ],
                 userPermissions: {
                     allowRecordMeters: true,
                     allowManageMeters: false,
@@ -1504,6 +1525,10 @@
                     { id: "CAT-DB", name: "Tủ phân phối khu vực (DB / Sub-panel)", color: "#AF52DE", icon: "server" },
                     { id: "CAT-PUMP", name: "Trạm bơm nước cấp, Bể bơi & STP", color: "#32ADE6", icon: "droplets" },
                     { id: "CAT-SOLAR", name: "Hệ thống Điện mặt trời (Solar)", color: "#eab308", icon: "sun" }
+                ],
+                meterOrder: [
+                    "EM-MSB01-TOTAL", "EM-CHILLER-01", "EM-VILLA-LAGOON", "EM-MAIN-KITCHEN", "EM-PUMP-STP", "EM-POOL-LIGHT",
+                    "WM-CITY-MAIN", "WM-DOM-BOOSTER", "WM-VILLA-ZONE", "WM-KITCHEN-FB", "WM-POOL-MAKEUP", "WM-STP-OUT"
                 ],
                 meters: [
                     { id: "EM-MSB01-TOTAL", type: "electric", isMaster: true, code: "EM-MSB01-TOTAL", name: "Công tơ tổng Tủ MSB-01 (Đầu nguồn)", zone: "Phòng Hạ Thế (LV Switchboard Room)", multiplier: 80, unit: "kWh", baseReading: 24500, avgDaily: 4800 },
@@ -1684,6 +1709,15 @@
             }
             if (!state.userPermissions) {
                 state.userPermissions = std.userPermissions;
+            }
+            // Tương thích dữ liệu cũ: giữ thứ tự hiện tại nếu chưa có cấu hình riêng.
+            const existingIds = new Set((state.meters || []).map(m => m.id));
+            const savedOrder = Array.isArray(state.meterOrder) ? state.meterOrder.filter(id => existingIds.has(id)) : [];
+            const missingIds = (state.meters || []).map(m => m.id).filter(id => !savedOrder.includes(id));
+            state.meterOrder = [...savedOrder, ...missingIds];
+            if (!Array.isArray(state.zones)) state.zones = [...std.zones];
+            if (!Array.isArray(state.reportTariffPeriods) || !state.reportTariffPeriods.length) {
+                state.reportTariffPeriods = [{ id: `TARIFF-${Date.now()}`, from: '2000-01-01', to: '2099-12-31', electricity: Number(state.electricityTariffVnd) || 2850, water: Number(state.waterTariffVnd) || 18500 }];
             }
             return state;
         }
@@ -2804,14 +2838,36 @@
             return meter?.baseReading || 0;
         }
 
+        function getOrderedMeters() {
+            const meters = appState.meters || [];
+            const order = Array.isArray(appState.meterOrder) ? appState.meterOrder : [];
+            const rank = new Map(order.map((id, index) => [id, index]));
+            return [...meters].sort((a, b) => (rank.get(a.id) ?? 999999) - (rank.get(b.id) ?? 999999));
+        }
+
+        window.moveMeterOrder = async function(meterId, direction) {
+            if (!checkPermission('allowManageMeters', 'Sắp xếp thứ tự công tơ')) return;
+            const order = getOrderedMeters().map(m => m.id);
+            const index = order.indexOf(meterId), target = index + direction;
+            if (index < 0 || target < 0 || target >= order.length) return;
+            [order[index], order[target]] = [order[target], order[index]];
+            appState.meterOrder = order;
+            const meterById = new Map((appState.meters || []).map(m => [m.id, m]));
+            appState.meters = order.map(id => meterById.get(id)).filter(Boolean);
+            renderMeterTables();
+            await pushStateToFirebase();
+            showToast('Đã cập nhật thứ tự công tơ.', 'blue');
+        };
+
         window.renderMeterTables = function() {
             const dateInput = document.getElementById('meterReadingDate');
             if (!dateInput.value) dateInput.value = getPastDateStr(0);
             const selectedDate = dateInput.value;
             const dayRecords = (appState.readings && appState.readings[selectedDate]) || {};
 
-            const elecMeters = (appState.meters || []).filter(m => m.type === 'electric');
-            const waterMeters = (appState.meters || []).filter(m => m.type === 'water');
+            const orderedMeters = getOrderedMeters();
+            const elecMeters = orderedMeters.filter(m => m.type === 'electric');
+            const waterMeters = orderedMeters.filter(m => m.type === 'water');
 
             let masterElecSum = 0, subElecSum = 0;
             let masterWaterSum = 0, subWaterSupplySum = 0;
@@ -2877,6 +2933,8 @@
                             <td class="py-3.5 px-4 text-right">
                                 <div class="inline-flex items-center gap-1.5">
                                     <button onclick="saveSingleMeterReading('${m.id}')" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow ${!canRecord ? 'opacity-50' : ''}">Lưu</button>
+                                    <button onclick="moveMeterOrder('${m.id}', -1)" title="Đưa lên" class="p-2 rounded-xl hover:bg-indigo-500/15 text-slate-400 hover:text-indigo-500 ${!canManageMeters ? 'opacity-40' : ''}"><i data-lucide="chevron-up" class="w-4 h-4"></i></button>
+                                    <button onclick="moveMeterOrder('${m.id}', 1)" title="Đưa xuống" class="p-2 rounded-xl hover:bg-indigo-500/15 text-slate-400 hover:text-indigo-500 ${!canManageMeters ? 'opacity-40' : ''}"><i data-lucide="chevron-down" class="w-4 h-4"></i></button>
                                     <button onclick="openEditMeterModal('${m.id}')" title="Chỉnh sửa cấu hình" class="p-2 rounded-xl hover:bg-blue-500/15 text-slate-400 hover:text-blue-500 ${!canManageMeters ? 'opacity-40' : ''}"><i data-lucide="pencil" class="w-4 h-4"></i></button>
                                     <button onclick="deleteMeter('${m.id}')" title="Xóa công tơ" class="p-2 rounded-xl hover:bg-red-500/15 text-slate-400 hover:text-red-500 ${!canManageMeters ? 'opacity-40' : ''}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                                 </div>
@@ -2967,6 +3025,71 @@
             } else {
                 showToast("Không có chỉ số hợp lệ nào để lưu.", "amber");
             }
+        };
+
+        window.openMeterZonesModal = function() {
+            if (!checkPermission('allowManageMeters', 'Quản lý khu vực công tơ')) return;
+            const zones = appState.zones || [];
+            openModal('Quản Lý Khu Vực Công Tơ', `
+                <div class="space-y-4 text-xs sm:text-sm">
+                    <div class="p-3 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-slate-600 dark:text-slate-300">
+                        Đổi tên khu vực sẽ tự cập nhật cho các công tơ và thiết bị đang gắn với khu vực đó. Xóa khu vực chỉ thực hiện được khi không còn công tơ/thiết bị sử dụng.
+                    </div>
+                    <form onsubmit="addMeterZone(event)" class="flex gap-2">
+                        <input id="newMeterZoneInput" required maxlength="120" placeholder="Tên khu vực thực tế..." class="flex-1 px-3 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700">
+                        <button class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold">Thêm</button>
+                    </form>
+                    <div class="space-y-2 max-h-[45vh] overflow-y-auto pr-1">
+                        ${zones.map((z, index) => `
+                            <div class="flex items-center gap-2 p-2 rounded-xl bg-slate-100/70 dark:bg-slate-800/70">
+                                <input id="zoneEdit-${index}" value="${String(z).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}" maxlength="120" class="min-w-0 flex-1 px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 text-xs">
+                                <button type="button" onclick="renameMeterZone(${index})" class="p-2 rounded-lg bg-blue-500/15 text-blue-500" title="Lưu tên"><i data-lucide="save" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="deleteMeterZone(${index})" class="p-2 rounded-lg bg-rose-500/15 text-rose-500" title="Xóa khu vực"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>`).join('') || '<div class="text-center text-slate-500 py-4">Chưa có khu vực.</div>'}
+                    </div>
+                    <button type="button" onclick="closeModal()" class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 font-bold">Đóng</button>
+                </div>`);
+        };
+
+        window.addMeterZone = async function(event) {
+            event.preventDefault();
+            const input = document.getElementById('newMeterZoneInput');
+            const name = input?.value.trim();
+            if (!name) return;
+            if ((appState.zones || []).some(z => z.toLowerCase() === name.toLowerCase())) { showToast('Khu vực này đã tồn tại.', 'amber'); return; }
+            appState.zones = [...(appState.zones || []), name];
+            await pushStateToFirebase();
+            openMeterZonesModal();
+            showToast(`Đã thêm khu vực “${name}”.`, 'emerald');
+        };
+
+        window.renameMeterZone = async function(index) {
+            if (!checkPermission('allowManageMeters', 'Đổi tên khu vực công tơ')) return;
+            const oldName = appState.zones?.[index];
+            const input = document.getElementById(`zoneEdit-${index}`);
+            const newName = input?.value.trim();
+            if (!oldName || !newName) return;
+            if ((appState.zones || []).some((z, i) => i !== index && z.toLowerCase() === newName.toLowerCase())) { showToast('Tên khu vực mới đã tồn tại.', 'amber'); return; }
+            appState.zones[index] = newName;
+            (appState.meters || []).forEach(m => { if (m.zone === oldName) m.zone = newName; });
+            (appState.equipment || []).forEach(eq => { if (eq.zone === oldName) eq.zone = newName; });
+            await pushStateToFirebase();
+            renderMeterTables(); updateDashboardCharts();
+            openMeterZonesModal();
+            showToast('Đã cập nhật khu vực theo thực tế.', 'emerald');
+        };
+
+        window.deleteMeterZone = async function(index) {
+            if (!checkPermission('allowManageMeters', 'Xóa khu vực công tơ')) return;
+            const zone = appState.zones?.[index];
+            if (!zone) return;
+            const usedByMeter = (appState.meters || []).some(m => m.zone === zone);
+            const usedByEquipment = (appState.equipment || []).some(eq => eq.zone === zone);
+            if (usedByMeter || usedByEquipment) { showToast('Không thể xóa: khu vực vẫn đang được công tơ hoặc thiết bị sử dụng.', 'red'); return; }
+            appState.zones.splice(index, 1);
+            await pushStateToFirebase();
+            openMeterZonesModal();
+            showToast(`Đã xóa khu vực “${zone}”.`, 'amber');
         };
 
         function getMeterZonesOptions(selectedZone = '') {
@@ -3060,7 +3183,10 @@
             if (existing) {
                 Object.assign(existing, payload);
             } else {
-                appState.meters.push({ id: `${type === 'electric' ? 'EM' : 'WM'}-${Date.now()}`, ...payload, avgDaily: 0 });
+                const newMeter = { id: `${type === 'electric' ? 'EM' : 'WM'}-${Date.now()}`, ...payload, avgDaily: 0 };
+                appState.meters.push(newMeter);
+                if (!Array.isArray(appState.meterOrder)) appState.meterOrder = [];
+                appState.meterOrder.push(newMeter.id);
             }
             closeModal();
             renderMeterTables();
@@ -3078,6 +3204,7 @@
                 'Thao tác này sẽ xóa cấu hình công tơ và toàn bộ lịch sử chỉ số liên quan khỏi dữ liệu báo cáo. Không thể hoàn tác nếu chưa có bản backup.',
                 async () => {
                     appState.meters = (appState.meters || []).filter(m => m.id !== meterId);
+                    appState.meterOrder = (appState.meterOrder || []).filter(id => id !== meterId);
                     Object.keys(appState.readings || {}).forEach(date => {
                         if (appState.readings[date]) delete appState.readings[date][meterId];
                     });
@@ -3176,21 +3303,192 @@
             reader.readAsArrayBuffer(file);
         };
 
-        window.exportResortExcelWorkbook = function() {
-            const selectedDate = document.getElementById('meterReadingDate')?.value || getPastDateStr(0);
-            const dayRecords = (appState.readings && appState.readings[selectedDate]) || {};
-            const rows = (appState.meters || []).map((m, i) => ({
-                "STT": i + 1, "Mã": m.code, "Tên": m.name, "Loại": m.type, "Master/Sub": m.isMaster ? "Master" : "Sub",
-                "Tiêu Thụ": dayRecords[m.id]?.consumption || 0
-            }));
-            if (typeof XLSX !== 'undefined') {
-                const wb = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(rows), "Chot_So");
-                XLSX.writeFile(wb, `Bao_Cao_Resort_${selectedDate}.xlsx`);
-                showToast("Đã xuất file Excel thành công!", "emerald");
-            } else {
-                showToast("Thư viện SheetJS chưa sẵn sàng.", "red");
+        function formatVnd(value) {
+            return `${Number(value || 0).toLocaleString('vi-VN')} đ`;
+        }
+
+        window.openReportTariffsModal = function() {
+            if (!checkPermission('allowEditConfigAndOcc', 'Cập nhật giá điện nước theo giai đoạn')) return;
+            const periods = (appState.reportTariffPeriods || []).slice();
+            openModal('Giá Điện & Giá Nước Theo Giai Đoạn', `
+                <div class="space-y-4 text-xs sm:text-sm">
+                    <div class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-slate-600 dark:text-slate-300">
+                        Mỗi giai đoạn áp dụng theo ngày bắt đầu và ngày kết thúc. Khi xuất báo cáo, hệ thống tự chọn đúng giá cho từng ngày và tính thành tiền trong sheet tổng hợp. Đơn giá tính bằng VNĐ/kWh và VNĐ/m³.
+                    </div>
+                    <form onsubmit="addReportTariffPeriod(event)" class="grid grid-cols-2 gap-2 p-3 rounded-2xl bg-slate-100/70 dark:bg-slate-800/70">
+                        <label class="font-semibold text-slate-500">Từ ngày<input id="tariffFrom" type="date" required class="w-full mt-1 px-2.5 py-2 rounded-xl bg-white dark:bg-slate-900 border"></label>
+                        <label class="font-semibold text-slate-500">Đến ngày<input id="tariffTo" type="date" required class="w-full mt-1 px-2.5 py-2 rounded-xl bg-white dark:bg-slate-900 border"></label>
+                        <label class="font-semibold text-slate-500">Giá điện<input id="tariffElectricity" type="number" min="0" step="1" required value="${appState.electricityTariffVnd || 2850}" class="w-full mt-1 px-2.5 py-2 rounded-xl bg-white dark:bg-slate-900 border"></label>
+                        <label class="font-semibold text-slate-500">Giá nước<input id="tariffWater" type="number" min="0" step="1" required value="${appState.waterTariffVnd || 18500}" class="w-full mt-1 px-2.5 py-2 rounded-xl bg-white dark:bg-slate-900 border"></label>
+                        <button class="col-span-2 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-white font-bold">Thêm giai đoạn giá</button>
+                    </form>
+                    <div class="space-y-2 max-h-[38vh] overflow-y-auto pr-1">
+                        ${periods.map((item, index) => `
+                            <div class="p-3 rounded-2xl bg-white/70 dark:bg-slate-900/70 border border-slate-200/70 dark:border-slate-700/60 space-y-2">
+                                <div class="grid grid-cols-2 gap-2">
+                                    <label class="font-semibold text-slate-500">Từ<input id="tariffEditFrom-${index}" type="date" value="${item.from}" class="w-full mt-1 px-2 py-1.5 rounded-lg bg-white dark:bg-slate-800 border"></label>
+                                    <label class="font-semibold text-slate-500">Đến<input id="tariffEditTo-${index}" type="date" value="${item.to}" class="w-full mt-1 px-2 py-1.5 rounded-lg bg-white dark:bg-slate-800 border"></label>
+                                    <label class="font-semibold text-slate-500">Giá điện<input id="tariffEditElectricity-${index}" type="number" min="0" value="${item.electricity}" class="w-full mt-1 px-2 py-1.5 rounded-lg bg-white dark:bg-slate-800 border"></label>
+                                    <label class="font-semibold text-slate-500">Giá nước<input id="tariffEditWater-${index}" type="number" min="0" value="${item.water}" class="w-full mt-1 px-2 py-1.5 rounded-lg bg-white dark:bg-slate-800 border"></label>
+                                </div>
+                                <div class="flex justify-end gap-2">
+                                    <button type="button" onclick="saveReportTariffPeriod(${index})" class="px-3 py-1.5 rounded-lg bg-blue-500/15 text-blue-500 font-bold">Lưu</button>
+                                    <button type="button" onclick="deleteReportTariffPeriod(${index})" class="px-3 py-1.5 rounded-lg bg-rose-500/15 text-rose-500 font-bold">Xóa</button>
+                                </div>
+                            </div>`).join('') || '<div class="text-center text-slate-500 py-3">Chưa có giai đoạn giá.</div>'}
+                    </div>
+                    <button type="button" onclick="closeModal()" class="w-full py-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 font-bold">Đóng</button>
+                </div>`);
+        };
+
+        function readTariffForm(prefix = '') {
+            const get = id => document.getElementById(prefix ? `${prefix}${id}` : id);
+            return {
+                from: get('From')?.value || get('tariffFrom')?.value,
+                to: get('To')?.value || get('tariffTo')?.value,
+                electricity: Number(get('Electricity')?.value || get('tariffElectricity')?.value),
+                water: Number(get('Water')?.value || get('tariffWater')?.value)
+            };
+        }
+
+        function validateTariffPeriod(item) {
+            return item.from && item.to && item.from <= item.to && Number.isFinite(item.electricity) && item.electricity >= 0 && Number.isFinite(item.water) && item.water >= 0;
+        }
+
+        window.addReportTariffPeriod = async function(event) {
+            event.preventDefault();
+            if (!checkPermission('allowEditConfigAndOcc', 'Thêm giai đoạn giá')) return;
+            const item = readTariffForm();
+            if (!validateTariffPeriod(item)) { showToast('Vui lòng kiểm tra ngày và đơn giá.', 'red'); return; }
+            appState.reportTariffPeriods = [...(appState.reportTariffPeriods || []), { id: `TARIFF-${Date.now()}`, ...item }];
+            appState.electricityTariffVnd = item.electricity;
+            appState.waterTariffVnd = item.water;
+            await pushStateToFirebase(false);
+            openReportTariffsModal();
+            showToast('Đã thêm giai đoạn giá điện nước.', 'emerald');
+        };
+
+        window.saveReportTariffPeriod = async function(index) {
+            if (!checkPermission('allowEditConfigAndOcc', 'Cập nhật giai đoạn giá')) return;
+            const item = {
+                from: document.getElementById(`tariffEditFrom-${index}`)?.value,
+                to: document.getElementById(`tariffEditTo-${index}`)?.value,
+                electricity: Number(document.getElementById(`tariffEditElectricity-${index}`)?.value),
+                water: Number(document.getElementById(`tariffEditWater-${index}`)?.value)
+            };
+            if (!validateTariffPeriod(item)) { showToast('Vui lòng kiểm tra ngày và đơn giá.', 'red'); return; }
+            const old = appState.reportTariffPeriods[index];
+            appState.reportTariffPeriods[index] = { ...old, ...item };
+            await pushStateToFirebase(false);
+            openReportTariffsModal();
+            showToast('Đã cập nhật giai đoạn giá.', 'emerald');
+        };
+
+        window.deleteReportTariffPeriod = async function(index) {
+            if (!checkPermission('allowEditConfigAndOcc', 'Xóa giai đoạn giá')) return;
+            if ((appState.reportTariffPeriods || []).length <= 1) { showToast('Cần giữ lại ít nhất một giai đoạn giá.', 'amber'); return; }
+            appState.reportTariffPeriods.splice(index, 1);
+            await pushStateToFirebase(false);
+            openReportTariffsModal();
+            showToast('Đã xóa giai đoạn giá.', 'amber');
+        };
+
+        function getTariffForDate(date) {
+            const periods = (appState.reportTariffPeriods || []).filter(p => p.from <= date && date <= p.to);
+            const item = periods.sort((a, b) => String(b.from).localeCompare(String(a.from)))[0];
+            return item || { electricity: Number(appState.electricityTariffVnd) || 2850, water: Number(appState.waterTariffVnd) || 18500 };
+        }
+
+        function getReportDateRange(anchorDate, period) {
+            const date = new Date(`${anchorDate}T12:00:00`);
+            if (Number.isNaN(date.getTime())) return [anchorDate, anchorDate];
+            const pad = n => String(n).padStart(2, '0');
+            const fmt = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+            let start = new Date(date), end = new Date(date);
+            if (period === 'week') {
+                const mondayOffset = (date.getDay() + 6) % 7;
+                start.setDate(date.getDate() - mondayOffset);
+                end = new Date(start); end.setDate(start.getDate() + 6);
+            } else if (period === 'month') {
+                start = new Date(date.getFullYear(), date.getMonth(), 1, 12);
+                end = new Date(date.getFullYear(), date.getMonth() + 1, 0, 12);
+            } else if (period === 'year') {
+                start = new Date(date.getFullYear(), 0, 1, 12);
+                end = new Date(date.getFullYear(), 11, 31, 12);
             }
+            return [fmt(start), fmt(end)];
+        }
+
+        window.exportResortExcelWorkbook = function() {
+            if (typeof XLSX === 'undefined') { showToast('Thư viện SheetJS chưa sẵn sàng.', 'red'); return; }
+            const anchorDate = document.getElementById('meterReadingDate')?.value || getPastDateStr(0);
+            const period = document.getElementById('reportPeriodSelect')?.value || 'day';
+            const [fromDate, toDate] = getReportDateRange(anchorDate, period);
+            const dates = [];
+            const cursor = new Date(`${fromDate}T12:00:00`);
+            const lastDate = new Date(`${toDate}T12:00:00`);
+            while (cursor <= lastDate) {
+                dates.push(cursor.toISOString().slice(0, 10));
+                cursor.setDate(cursor.getDate() + 1);
+            }
+            const meters = getOrderedMeters();
+            const fixedHeaders = ['STT', 'Mã công tơ', 'Tên công tơ', 'Loại công tơ', 'Hệ số', 'Khu vực', 'Ngày bắt đầu xuất'];
+            const makeRows = meterType => meters.filter(m => m.type === meterType).map((m, index) => {
+                const row = {
+                    'STT': index + 1, 'Mã công tơ': m.code, 'Tên công tơ': m.name,
+                    'Loại công tơ': m.type === 'electric' ? 'Điện' : 'Nước', 'Hệ số': m.multiplier || 1,
+                    'Khu vực': m.zone || '', 'Ngày bắt đầu xuất': fromDate
+                };
+                dates.forEach(date => { row[date] = appState.readings?.[date]?.[m.id]?.curr ?? ''; });
+                return row;
+            });
+            const makeConsumptionRows = meterType => meters.filter(m => m.type === meterType).map((m, index) => {
+                const row = {
+                    'STT': index + 1, 'Mã công tơ': m.code, 'Tên công tơ': m.name,
+                    'Loại công tơ': m.type === 'electric' ? 'Điện' : 'Nước', 'Hệ số': m.multiplier || 1,
+                    'Khu vực': m.zone || '', 'Ngày bắt đầu xuất': fromDate
+                };
+                dates.forEach(date => { row[date] = appState.readings?.[date]?.[m.id]?.consumption ?? ''; });
+                return row;
+            });
+            const dateHeaders = [...fixedHeaders, ...dates];
+            const wb = XLSX.utils.book_new();
+            const widths = [{wch:7},{wch:18},{wch:38},{wch:16},{wch:10},{wch:34},{wch:18}, ...dates.map(() => ({wch:13}))];
+            const appendMatrixSheet = (rows, name) => {
+                const ws = XLSX.utils.json_to_sheet(rows, { header: dateHeaders });
+                ws['!cols'] = widths;
+                XLSX.utils.book_append_sheet(wb, ws, name);
+            };
+            appendMatrixSheet(makeRows('electric'), 'Dien_Chi_So');
+            appendMatrixSheet(makeConsumptionRows('electric'), 'Dien_Tieu_Thu');
+            appendMatrixSheet(makeRows('water'), 'Nuoc_Chi_So');
+            appendMatrixSheet(makeConsumptionRows('water'), 'Nuoc_Tieu_Thu');
+
+            const summaryRows = dates.map(date => {
+                const tariff = getTariffForDate(date);
+                let electricity = 0, water = 0;
+                meters.forEach(m => {
+                    const consumption = Number(appState.readings?.[date]?.[m.id]?.consumption) || 0;
+                    if (m.type === 'electric') electricity += consumption;
+                    if (m.type === 'water' && !m.isEffluent) water += consumption;
+                });
+                const electricityCost = Math.round(electricity * tariff.electricity);
+                const waterCost = Math.round(water * tariff.water);
+                return {
+                    'Ngày': date, 'Điện tiêu thụ (kWh)': electricity, 'Giá điện (VNĐ/kWh)': tariff.electricity,
+                    'Tiền điện (VNĐ)': electricityCost, 'Nước tiêu thụ (m³)': water, 'Giá nước (VNĐ/m³)': tariff.water,
+                    'Tiền nước (VNĐ)': waterCost, 'Tổng tiền điện nước (VNĐ)': electricityCost + waterCost
+                };
+            });
+            const summaryTotal = summaryRows.reduce((acc, row) => {
+                Object.keys(acc).forEach(key => { if (key !== 'Ngày') acc[key] = (acc[key] || 0) + (Number(row[key]) || 0); });
+                return acc;
+            }, {'Ngày': 'TỔNG CỘNG'});
+            const summaryWs = XLSX.utils.json_to_sheet([...summaryRows, summaryTotal]);
+            summaryWs['!cols'] = [{wch:14},{wch:22},{wch:20},{wch:20},{wch:22},{wch:20},{wch:20},{wch:28}];
+            XLSX.utils.book_append_sheet(wb, summaryWs, 'Tong_Hop_Bao_Cao');
+            XLSX.writeFile(wb, `Bao_Cao_Resort_${period}_${fromDate}_${toDate}.xlsx`);
+            showToast(`Đã xuất 5 sheet: điện, nước và tổng hợp từ ${fromDate} đến ${toDate}.`, 'emerald');
         };
 
         window.downloadExcelTemplate = function() { exportResortExcelWorkbook(); };
