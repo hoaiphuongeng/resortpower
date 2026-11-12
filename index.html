@@ -2877,7 +2877,8 @@
                             <td class="py-3.5 px-4 text-right">
                                 <div class="inline-flex items-center gap-1.5">
                                     <button onclick="saveSingleMeterReading('${m.id}')" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow ${!canRecord ? 'opacity-50' : ''}">Lưu</button>
-                                    <button onclick="deleteMeter('${m.id}')" class="p-2 rounded-xl hover:bg-red-500/15 text-slate-400 hover:text-red-500 ${!canManageMeters ? 'opacity-40' : ''}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                    <button onclick="openEditMeterModal('${m.id}')" title="Chỉnh sửa cấu hình" class="p-2 rounded-xl hover:bg-blue-500/15 text-slate-400 hover:text-blue-500 ${!canManageMeters ? 'opacity-40' : ''}"><i data-lucide="pencil" class="w-4 h-4"></i></button>
+                                    <button onclick="deleteMeter('${m.id}')" title="Xóa công tơ" class="p-2 rounded-xl hover:bg-red-500/15 text-slate-400 hover:text-red-500 ${!canManageMeters ? 'opacity-40' : ''}"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -2968,52 +2969,125 @@
             }
         };
 
-        window.openAddMeterModal = function() {
-            if (!checkPermission('allowManageMeters', 'Thêm công tơ mới')) return;
-            const zonesOptions = (appState.zones || []).map(z => `<option value="${z}">${z}</option>`).join('');
-            openModal("Thêm Công Tơ Điện / Nước", `
-                <form onsubmit="handleCreateMeter(event)" class="space-y-3.5 text-xs sm:text-sm">
+        function getMeterZonesOptions(selectedZone = '') {
+            const zones = [...new Set([...(appState.zones || []), selectedZone].filter(Boolean))];
+            return zones.map(z => `<option value="${z.replace(/"/g, '&quot;')}" ${z === selectedZone ? 'selected' : ''}>${z}</option>`).join('');
+        }
+
+        function getMeterConfigFormHtml(meter = {}) {
+            const isEditing = Boolean(meter.id);
+            return `
+                <form onsubmit="handleSaveMeter(event, ${isEditing ? `'${meter.id}'` : 'null'})" class="space-y-3.5 text-xs sm:text-sm">
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="font-semibold text-slate-500">Loại</label>
-                            <select id="newMeterType" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
-                                <option value="electric">⚡ Điện (kWh)</option>
-                                <option value="water">💧 Nước (m³)</option>
+                            <select id="meterConfigType" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
+                                <option value="electric" ${meter.type !== 'water' ? 'selected' : ''}>⚡ Điện (kWh)</option>
+                                <option value="water" ${meter.type === 'water' ? 'selected' : ''}>💧 Nước (m³)</option>
                             </select>
                         </div>
                         <div>
                             <label class="font-semibold text-slate-500">Phân loại</label>
-                            <select id="newMeterIsMaster" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
-                                <option value="false">Nhánh (Sub-meter)</option>
-                                <option value="true">★ Đầu nguồn (Master)</option>
+                            <select id="meterConfigIsMaster" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
+                                <option value="false" ${!meter.isMaster ? 'selected' : ''}>Nhánh (Sub-meter)</option>
+                                <option value="true" ${meter.isMaster ? 'selected' : ''}>★ Đầu nguồn (Master)</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label class="font-semibold text-slate-500">Mã công tơ</label>
-                        <input id="newMeterCode" type="text" required placeholder="VD: EM-VILLA-09" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
+                            <label class="font-semibold text-slate-500">Mã công tơ</label>
+                        <input id="meterConfigCode" type="text" required value="${meter.code || ''}" placeholder="VD: EM-VILLA-09" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
                     </div>
                     <div>
                         <label class="font-semibold text-slate-500">Tên công tơ / Vị trí</label>
-                        <input id="newMeterName" type="text" required placeholder="VD: Công tơ Villa 45" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border">
+                        <input id="meterConfigName" type="text" required value="${meter.name || ''}" placeholder="VD: Công tơ Villa 45" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border">
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="font-semibold text-slate-500">Khu vực</label>
-                            <select id="newMeterZone" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border">${zonesOptions}</select>
+                            <select id="meterConfigZone" class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border">${getMeterZonesOptions(meter.zone)}</select>
                         </div>
                         <div>
                             <label class="font-semibold text-slate-500">Hệ số nhân</label>
-                            <input id="newMeterMult" type="number" step="any" value="1" required class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
+                            <input id="meterConfigMult" type="number" min="0.000001" step="any" value="${meter.multiplier ?? 1}" required class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-bold">
                         </div>
                     </div>
                     <div>
                         <label class="font-semibold text-slate-500">Số bàn giao ban đầu</label>
-                        <input id="newMeterBase" type="number" step="any" value="0" required class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
+                        <input id="meterConfigBase" type="number" step="any" value="${meter.baseReading ?? 0}" required class="w-full mt-1 px-3 py-2 rounded-xl bg-white dark:bg-slate-800 border font-mono font-bold">
                     </div>
-                    <button type="submit" class="w-full py-3 rounded-2xl bg-blue-600 text-white font-bold">Lưu Công Tơ</button>
+                    <div class="p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-[11px] text-slate-500 dark:text-slate-300">
+                        ${isEditing ? 'Thay đổi sẽ được áp dụng cho các lần ghi chỉ số tiếp theo; lịch sử đã ghi vẫn được giữ nguyên.' : 'Công tơ mới sẽ được thêm vào danh sách ghi chỉ số và báo cáo.'}
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-2xl bg-blue-600 hover:bg-blue-500 text-white font-bold">${isEditing ? 'Lưu Thay Đổi Cấu Hình' : 'Thêm Công Tơ'}</button>
                 </form>
-            `);
+            `;
+        }
+
+        window.openAddMeterModal = function() {
+            if (!checkPermission('allowManageMeters', 'Thêm công tơ mới')) return;
+            openModal('Thêm Công Tơ Điện / Nước', getMeterConfigFormHtml());
+        };
+
+        window.openEditMeterModal = function(meterId) {
+            if (!checkPermission('allowManageMeters', 'Chỉnh sửa cấu hình công tơ')) return;
+            const meter = (appState.meters || []).find(m => m.id === meterId);
+            if (!meter) { showToast('Không tìm thấy công tơ cần chỉnh sửa.', 'red'); return; }
+            openModal(`Chỉnh Sửa Cấu Hình: ${meter.code}`, getMeterConfigFormHtml(meter));
+        };
+
+        window.handleSaveMeter = async function(event, meterId = null) {
+            event.preventDefault();
+            if (!checkPermission('allowManageMeters', meterId ? 'Chỉnh sửa cấu hình công tơ' : 'Thêm công tơ mới')) return;
+
+            const type = document.getElementById('meterConfigType').value;
+            const code = document.getElementById('meterConfigCode').value.trim();
+            const name = document.getElementById('meterConfigName').value.trim();
+            const zone = document.getElementById('meterConfigZone').value;
+            const multiplier = Number(document.getElementById('meterConfigMult').value);
+            const baseReading = Number(document.getElementById('meterConfigBase').value);
+            const isMaster = document.getElementById('meterConfigIsMaster').value === 'true';
+
+            if (!code || !name || !Number.isFinite(multiplier) || multiplier <= 0 || !Number.isFinite(baseReading) || baseReading < 0) {
+                showToast('Vui lòng kiểm tra mã, tên, hệ số và số bàn giao ban đầu.', 'red'); return;
+            }
+            const duplicate = (appState.meters || []).find(m => m.code.toLowerCase() === code.toLowerCase() && m.id !== meterId);
+            if (duplicate) { showToast(`Mã công tơ “${code}” đã tồn tại.`, 'red'); return; }
+
+            const unit = type === 'electric' ? 'kWh' : 'm³';
+            const existing = meterId ? (appState.meters || []).find(m => m.id === meterId) : null;
+            const payload = { type, isMaster, code, name, zone, multiplier, unit, baseReading };
+            if (existing) {
+                Object.assign(existing, payload);
+            } else {
+                appState.meters.push({ id: `${type === 'electric' ? 'EM' : 'WM'}-${Date.now()}`, ...payload, avgDaily: 0 });
+            }
+            closeModal();
+            renderMeterTables();
+            updateDashboardCharts();
+            await pushStateToFirebase();
+            showToast(existing ? `Đã cập nhật cấu hình ${code}.` : `Đã thêm công tơ ${code}.`, 'emerald');
+        };
+
+        window.deleteMeter = function(meterId) {
+            if (!checkPermission('allowManageMeters', 'Xóa công tơ')) return;
+            const meter = (appState.meters || []).find(m => m.id === meterId);
+            if (!meter) return;
+            openConfirmDeleteModal(
+                `công tơ ${meter.code} — ${meter.name}`,
+                'Thao tác này sẽ xóa cấu hình công tơ và toàn bộ lịch sử chỉ số liên quan khỏi dữ liệu báo cáo. Không thể hoàn tác nếu chưa có bản backup.',
+                async () => {
+                    appState.meters = (appState.meters || []).filter(m => m.id !== meterId);
+                    Object.keys(appState.readings || {}).forEach(date => {
+                        if (appState.readings[date]) delete appState.readings[date][meterId];
+                    });
+                    Object.keys(unsavedMeterInputs).forEach(key => { if (key.endsWith(`__${meterId}`)) delete unsavedMeterInputs[key]; });
+                    renderMeterTables();
+                    updateDashboardCharts();
+                    await pushStateToFirebase();
+                    showToast(`Đã xóa công tơ ${meter.code}.`, 'amber');
+                }
+            );
         };
 
         // Excel & CSV Export
